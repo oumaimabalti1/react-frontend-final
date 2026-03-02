@@ -1,17 +1,46 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+
+// layouts
+
+
+import Auth from "layouts/Auth.js";
+import User from "layouts/User.js";
+// views without layouts
+
+
+
+
+import Landing from "views/Landing.js";
+import Profile from "views/Profile.js";
+import Index from "views/Index.js";
+import Aboutus from "views/Aboutus.js";
+import Whyus from "views/Whyus";
+
+
+ReactDOM.render(
+  <BrowserRouter>
+    <Switch>
+      {/* add routes with layouts */}
+     
+      <Route path="/auth" component={Auth} />
+      <Route path="/candidat" component={User} />
+      <Route path="/employee" component={User} />
+      <Route path="/admin" component={User} />
+      <Route path="/hr" component={User} />
+      {/* add routes without layouts */}
+      
+
+      <Route path="/landing" exact component={Landing} />
+      <Route path="/whyus" exact component={Whyus} />
+    <Route path="/aboutus" exact component={Aboutus} />
+      <Route path="/profile" exact component={Profile} />
+      <Route path="/" exact component={Index} />
+      {/* add redirect for first page */}
+      <Redirect from="*" to="/" />
+    </Switch>
+  </BrowserRouter>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
