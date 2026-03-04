@@ -3,13 +3,6 @@ import { Link } from "react-router-dom";
 import FreeNavbar from "components/Navbars/FreeNavbar.js";
 import { LogIn, UserPlus, Shield, Users, Briefcase, ArrowRight } from "lucide-react";
 
-const PORTALS = [
-  { icon: Shield,   color: "#f59e0b", label: "Administrateur", desc: "Gérer les entreprises et accès" },
-  { icon: Users,    color: "#3b82f6", label: "RH",             desc: "Gérer les employés et offres" },
-  { icon: Briefcase,color: "#8b5cf6", label: "Candidat",       desc: "Postuler et suivre vos candidatures" },
-  { icon: UserPlus, color: "#10b981", label: "Employé",        desc: "Congés, plaintes et plus" },
-];
-
 export default function Landing() {
   return (
     <>
@@ -60,26 +53,7 @@ export default function Landing() {
                 Une plateforme unique pour gérer candidats, employés, processus RH et administration en toute sécurité.
               </p>
 
-              {/* Portals list */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {PORTALS.map(({ icon: Icon, color, label, desc }) => (
-                  <div key={label} style={{
-                    display: "flex", alignItems: "center", gap: 12,
-                    padding: "10px 14px", borderRadius: 12,
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}>
-                    <div style={{ width: 34, height: 34, borderRadius: 9, background: color + "20", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Icon size={16} color={color} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{label}</div>
-                      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>{desc}</div>
-                    </div>
-                    <ArrowRight size={14} color="rgba(255,255,255,0.2)" style={{ marginLeft: "auto" }} />
-                  </div>
-                ))}
-              </div>
+           
             </div>
 
             {/* Right — auth card */}

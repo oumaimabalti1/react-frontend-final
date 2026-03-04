@@ -2,24 +2,39 @@ import React, { useState, useEffect } from "react";
 import Navbar from "components/Navbars/HNavbar.js";
 import api from "services/api";
 
+function CheckIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
 function Toast({ toast }) {
   if (!toast) return null;
+  const isError = toast.type === "error";
   return (
-    <div style={{
-      position: "fixed", top: 24, right: 24, zIndex: 9999,
-      background: toast.type === "error" ? "#ef4444" : "#10b981",
-      color: "#fff", borderRadius: 12, padding: "14px 24px",
-      fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-    }}>
-      {toast.type === "error" ? "❌" : "✅"} {toast.msg}
+    <div className={`toast ${isError ? "toast--error" : "toast--success"}`}>
+      <span className={`toast__icon ${isError ? "toast__icon--error" : "toast__icon--success"}`}>
+        {isError ? <XIcon /> : <CheckIcon />}
+      </span>
+      {toast.msg}
     </div>
   );
 }
 
 const statutConfig = {
-  EN_ATTENTE: { label: "En attente", color: "#d97706", bg: "#fffbeb" },
-  ACCEPTEE:   { label: "Acceptée",   color: "#059669", bg: "#ecfdf5" },
-  REFUSEE:    { label: "Refusée",    color: "#ef4444", bg: "#fef2f2" },
+  EN_ATTENTE: { label: "En attente", cls: "status-badge--pending" },
+  ACCEPTEE:   { label: "Acceptée",   cls: "status-badge--success" },
+  REFUSEE:    { label: "Refusée",    cls: "status-badge--error"   },
 };
 
 export default function Candidatures() {
@@ -48,7 +63,7 @@ export default function Candidatures() {
     setActionId(id + action);
     try {
       await api.put(`/rh/candidatures/${id}/${action}`);
-      showToast(action === "accept" ? "Candidature acceptée ✓" : "Candidature refusée");
+      showToast(action === "accept" ? "Candidature acceptée" : "Candidature refusée");
       fetchCandidatures();
     } catch (err) {
       showToast(err.response?.data?.message || "Erreur", "error");
@@ -63,76 +78,79 @@ export default function Candidatures() {
     <>
       <Navbar />
       <Toast toast={toast} />
-      <main style={{ minHeight: "100vh", background: "#f8fafc", paddingTop: 80 }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 24px" }}>
+      <main className="page-root--padded">
+        <div className="page-container">
 
-          <div style={{ marginBottom: 32 }}>
-            <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Candidatures reçues</h1>
-            <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>{candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""}</p>
+          <div className="page-header">
+            <h1 className="page-header__title">Candidatures reçues</h1>
+            <p className="page-header__count">
+              {candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""}
+            </p>
           </div>
 
-          {/* Filters */}
-          <div style={{ display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
+          <div className="filter-bar">
             {[
-              { key: "ALL", label: "Toutes" },
+              { key: "ALL",       label: "Toutes" },
               { key: "EN_ATTENTE", label: "En attente" },
-              { key: "ACCEPTEE", label: "Acceptées" },
-              { key: "REFUSEE", label: "Refusées" },
+              { key: "ACCEPTEE",  label: "Acceptées" },
+              { key: "REFUSEE",   label: "Refusées" },
             ].map(f => (
-              <button key={f.key} onClick={() => setFilter(f.key)} style={{
-                padding: "8px 18px", borderRadius: 20, border: "1.5px solid",
-                borderColor: filter === f.key ? "#2563eb" : "#e2e8f0",
-                background: filter === f.key ? "#eff6ff" : "#fff",
-                color: filter === f.key ? "#2563eb" : "#6b7280",
-                fontWeight: 600, fontSize: 13, cursor: "pointer",
-              }}>
-                {f.label} {f.key === "ALL" ? `(${candidatures.length})` : `(${candidatures.filter(c => c.statut === f.key).length})`}
+              <button
+                key={f.key}
+                onClick={() => setFilter(f.key)}
+                className={`filter-btn${filter === f.key ? " filter-btn--active" : ""}`}
+              >
+                {f.label}&nbsp;
+                ({f.key === "ALL" ? candidatures.length : candidatures.filter(c => c.statut === f.key).length})
               </button>
             ))}
           </div>
 
-          {/* List */}
           {loading ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {Array(4).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 100, opacity: 0.5 }} />)}
+            <div className="skeleton-list">
+              {Array(4).fill(0).map((_, i) => (
+                <div key={i} className="skeleton-item" style={{ height: 100 }} />
+              ))}
             </div>
           ) : filtered.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px 0", color: "#94a3b8" }}>
-              <div style={{ fontSize: 48, marginBottom: 12 }}>📭</div>
+            <div className="empty-state">
+              <div className="empty-state__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M9 12h6m-3-3v6M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round"/>
+                </svg>
+              </div>
               <p>Aucune candidature</p>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div className="card-list">
               {filtered.map(c => {
-                const statut = statutConfig[c.statut] || { label: c.statut, color: "#6b7280", bg: "#f1f5f9" };
+                const statut = statutConfig[c.statut] || { label: c.statut, cls: "status-badge--neutral" };
                 return (
-                  <div key={c._id} style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", boxShadow: "0 2px 16px rgba(30,60,120,0.07)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                    <div style={{ width: 42, height: 42, borderRadius: 11, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#059669", fontSize: 16, flexShrink: 0 }}>
+                  <div key={c._id} className="card">
+                    <div className="avatar avatar--green">
                       {(c.candidatId?.name || "?")[0].toUpperCase()}
                     </div>
-                    <div style={{ flex: 1, minWidth: 150 }}>
-                      <p style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", margin: 0 }}>{c.candidatId?.name}</p>
-                      <p style={{ fontSize: 13, color: "#6b7280", marginTop: 2 }}>{c.candidatId?.email}</p>
-                      <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>📋 {c.offreId?.titre}</p>
+                    <div className="card-info">
+                      <p className="card-info__name">{c.candidatId?.name}</p>
+                      <p className="card-info__sub">{c.candidatId?.email}</p>
+                      <p className="card-info__meta">{c.offreId?.titre}</p>
                     </div>
-                    <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700 }}>
-                      {statut.label}
-                    </span>
+                    <span className={`status-badge ${statut.cls}`}>{statut.label}</span>
                     {c.statut === "EN_ATTENTE" && (
-                      <div style={{ display: "flex", gap: 8 }}>
+                      <div className="action-group">
                         <button
+                          className="btn btn--accept"
                           onClick={() => handleAction(c._id, "accept")}
                           disabled={actionId === c._id + "accept"}
-                          style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#ecfdf5", color: "#059669", fontWeight: 600, fontSize: 13, cursor: "pointer" }}
                         >
-                          {actionId === c._id + "accept" ? "..." : "✓ Accepter"}
+                          {actionId === c._id + "accept" ? "..." : "Accepter"}
                         </button>
                         <button
+                          className="btn btn--reject"
                           onClick={() => handleAction(c._id, "refuse")}
                           disabled={actionId === c._id + "refuse"}
-                          style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#fef2f2", color: "#ef4444", fontWeight: 600, fontSize: 13, cursor: "pointer" }}
                         >
-                          {actionId === c._id + "refuse" ? "..." : "✕ Refuser"}
+                          {actionId === c._id + "refuse" ? "..." : "Refuser"}
                         </button>
                       </div>
                     )}

@@ -2,23 +2,46 @@ import React, { useState, useEffect } from "react";
 import Navbar from "components/Navbars/HNavbar.js";
 import api from "services/api";
 
+function CheckIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function XIcon({ size = 12 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 12 12" fill="none">
+      <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+function ReplyIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
 function Toast({ toast }) {
   if (!toast) return null;
+  const isError = toast.type === "error";
   return (
-    <div style={{
-      position: "fixed", top: 24, right: 24, zIndex: 9999,
-      background: toast.type === "error" ? "#ef4444" : "#10b981",
-      color: "#fff", borderRadius: 12, padding: "14px 24px",
-      fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-    }}>
-      {toast.type === "error" ? "❌" : "✅"} {toast.msg}
+    <div className={`toast ${isError ? "toast--error" : "toast--success"}`}>
+      <span className={`toast__icon ${isError ? "toast__icon--error" : "toast__icon--success"}`}>
+        {isError ? <XIcon /> : <CheckIcon />}
+      </span>
+      {toast.msg}
     </div>
   );
 }
 
 const statutConfig = {
-  EN_ATTENTE: { label: "En attente", color: "#d97706", bg: "#fffbeb" },
-  TRAITEE:    { label: "Traitée",    color: "#059669", bg: "#ecfdf5" },
+  EN_ATTENTE: { label: "En attente", cls: "status-badge--pending" },
+  TRAITEE:    { label: "Traitée",    cls: "status-badge--success" },
 };
 
 export default function Plaintes() {
@@ -68,114 +91,123 @@ export default function Plaintes() {
       <Navbar />
       <Toast toast={toast} />
 
-      {/* Reply Modal */}
       {replyModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-          <div style={{ background: "#fff", borderRadius: 20, padding: "36px", maxWidth: 540, width: "100%", boxShadow: "0 8px 40px rgba(0,0,0,0.2)", position: "relative" }}>
-            <button onClick={() => { setReplyModal(null); setReponse(""); }} style={{ position: "absolute", top: 16, right: 16, background: "#f1f5f9", border: "none", borderRadius: 8, width: 32, height: 32, cursor: "pointer", fontSize: 16 }}>✕</button>
+        <div className="modal-backdrop">
+          <div className="modal modal--md">
+            <button
+              onClick={() => { setReplyModal(null); setReponse(""); }}
+              className="modal__close"
+            >
+              <XIcon />
+            </button>
 
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1a2340", marginBottom: 8 }}>💬 Répondre à la plainte</h2>
-            <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20 }}>De : {replyModal.employeId?.name} · {replyModal.employeId?.departement}</p>
+            <h2 className="modal__title">Répondre à la plainte</h2>
+            <p className="modal__subtitle">
+              De : {replyModal.employeId?.name} · {replyModal.employeId?.departement}
+            </p>
 
-            <div style={{ background: "#f8fafc", borderRadius: 12, padding: "16px", marginBottom: 20 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 6 }}>Plainte :</p>
-              <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.6, margin: 0 }}>{replyModal.description}</p>
+            <div className="reply-complaint-box">
+              <p className="reply-complaint-box__label">Plainte :</p>
+              <p>{replyModal.description}</p>
             </div>
 
-            <label style={{ fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 8 }}>
-              Votre réponse *
-            </label>
+            <label className="form-label">Votre réponse *</label>
             <textarea
               value={reponse}
               onChange={e => setReponse(e.target.value)}
               rows={4}
               placeholder="Rédigez votre réponse..."
-              style={{ width: "100%", padding: "12px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", resize: "vertical", boxSizing: "border-box", marginBottom: 20 }}
+              className="form-textarea"
             />
-            <button onClick={handleReply} disabled={replyLoading || !reponse.trim()} style={{
-              width: "100%", padding: "12px", borderRadius: 12, border: "none",
-              background: reponse.trim() ? "linear-gradient(135deg, #2563eb, #1d4ed8)" : "#e2e8f0",
-              color: reponse.trim() ? "#fff" : "#94a3b8",
-              fontWeight: 700, fontSize: 15, cursor: reponse.trim() ? "pointer" : "not-allowed",
-            }}>
-              {replyLoading ? "Envoi..." : "📨 Envoyer la réponse"}
+            <button
+              onClick={handleReply}
+              disabled={replyLoading || !reponse.trim()}
+              className={`btn--full ${reponse.trim() ? "btn--full-primary" : "btn--full-disabled"}`}
+            >
+              {replyLoading ? "Envoi..." : "Envoyer la réponse"}
             </button>
           </div>
         </div>
       )}
 
-      <main style={{ minHeight: "100vh", background: "#f8fafc", paddingTop: 80 }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 24px" }}>
+      <main className="page-root--padded">
+        <div className="page-container">
 
-          <div style={{ marginBottom: 32 }}>
-            <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Plaintes des Employés</h1>
-            <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>{plaintes.length} plainte{plaintes.length !== 1 ? "s" : ""}</p>
+          <div className="page-header">
+            <h1 className="page-header__title">Plaintes des Employés</h1>
+            <p className="page-header__count">
+              {plaintes.length} plainte{plaintes.length !== 1 ? "s" : ""}
+            </p>
           </div>
 
-          {/* Filters */}
-          <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+          <div className="filter-bar">
             {[
-              { key: "ALL", label: "Toutes" },
+              { key: "ALL",       label: "Toutes" },
               { key: "EN_ATTENTE", label: "En attente" },
-              { key: "TRAITEE", label: "Traitées" },
+              { key: "TRAITEE",   label: "Traitées" },
             ].map(f => (
-              <button key={f.key} onClick={() => setFilter(f.key)} style={{
-                padding: "8px 18px", borderRadius: 20, border: "1.5px solid",
-                borderColor: filter === f.key ? "#2563eb" : "#e2e8f0",
-                background: filter === f.key ? "#eff6ff" : "#fff",
-                color: filter === f.key ? "#2563eb" : "#6b7280",
-                fontWeight: 600, fontSize: 13, cursor: "pointer",
-              }}>
-                {f.label} {f.key === "ALL" ? `(${plaintes.length})` : `(${plaintes.filter(p => p.statut === f.key).length})`}
+              <button
+                key={f.key}
+                onClick={() => setFilter(f.key)}
+                className={`filter-btn${filter === f.key ? " filter-btn--active" : ""}`}
+              >
+                {f.label}&nbsp;
+                ({f.key === "ALL" ? plaintes.length : plaintes.filter(p => p.statut === f.key).length})
               </button>
             ))}
           </div>
 
           {loading ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {Array(3).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 120, opacity: 0.5 }} />)}
+            <div className="skeleton-list">
+              {Array(3).fill(0).map((_, i) => (
+                <div key={i} className="skeleton-item" style={{ height: 120 }} />
+              ))}
             </div>
           ) : filtered.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px 0", color: "#94a3b8" }}>
-              <div style={{ fontSize: 48, marginBottom: 12 }}>📭</div>
+            <div className="empty-state">
+              <div className="empty-state__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round"/>
+                </svg>
+              </div>
               <p>Aucune plainte</p>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div className="card-list">
               {filtered.map(p => {
-                const statut = statutConfig[p.statut] || { label: p.statut, color: "#6b7280", bg: "#f1f5f9" };
+                const statut = statutConfig[p.statut] || { label: p.statut, cls: "status-badge--neutral" };
                 return (
-                  <div key={p._id} style={{ background: "#fff", borderRadius: 16, padding: "24px", boxShadow: "0 2px 16px rgba(30,60,120,0.07)" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 14, flexWrap: "wrap" }}>
-                      <div style={{ width: 42, height: 42, borderRadius: 11, background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#ef4444", fontSize: 16, flexShrink: 0 }}>
+                  <div key={p._id} className="card--complaint">
+                    <div className="complaint-header">
+                      <div className="avatar avatar--red">
                         {(p.employeId?.name || "?")[0].toUpperCase()}
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <p style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", margin: 0 }}>{p.employeId?.name}</p>
-                        <p style={{ fontSize: 13, color: "#6b7280", marginTop: 2 }}>🏢 {p.employeId?.departement || "—"} · {new Date(p.createdAt).toLocaleDateString("fr-FR")}</p>
+                      <div className="card-info">
+                        <p className="card-info__name">{p.employeId?.name}</p>
+                        <p className="card-info__sub">
+                          {p.employeId?.departement || "—"} · {new Date(p.createdAt).toLocaleDateString("fr-FR")}
+                        </p>
                       </div>
-                      <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700 }}>
-                        {statut.label}
-                      </span>
+                      <span className={`status-badge ${statut.cls}`}>{statut.label}</span>
                     </div>
 
-                    <div style={{ background: "#f8fafc", borderRadius: 10, padding: "12px 16px", marginBottom: p.reponse ? 12 : 0 }}>
-                      <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.6, margin: 0 }}>{p.description}</p>
+                    <div className="complaint-body">
+                      <p>{p.description}</p>
                     </div>
 
                     {p.reponse && (
-                      <div style={{ background: "#ecfdf5", borderRadius: 10, padding: "12px 16px", marginTop: 10 }}>
-                        <p style={{ fontSize: 12, fontWeight: 600, color: "#059669", marginBottom: 4 }}>✅ Votre réponse :</p>
-                        <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.6, margin: 0 }}>{p.reponse}</p>
+                      <div className="complaint-reply">
+                        <p className="complaint-reply__label">Réponse :</p>
+                        <p>{p.reponse}</p>
                       </div>
                     )}
 
                     {p.statut === "EN_ATTENTE" && (
-                      <button onClick={() => { setReplyModal(p); setReponse(""); }} style={{
-                        marginTop: 14, padding: "9px 20px", borderRadius: 10, border: "none",
-                        background: "#eff6ff", color: "#2563eb", fontWeight: 600, fontSize: 13, cursor: "pointer",
-                      }}>
-                        💬 Répondre
+                      <button
+                        onClick={() => { setReplyModal(p); setReponse(""); }}
+                        className="btn--reply"
+                      >
+                        <ReplyIcon /> Répondre
                       </button>
                     )}
                   </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "components/Navbars/CNavbar.js";
 import api from "services/api";
+import { Briefcase, Inbox, AlertCircle, CheckCircle, XCircle, Building2 } from "lucide-react";
 
 function Toast({ toast }) {
   if (!toast) return null;
@@ -11,8 +12,9 @@ function Toast({ toast }) {
       background: toast.type === "error" ? "#ef4444" : "#10b981",
       color: "#fff", borderRadius: 12, padding: "14px 24px",
       fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+      display: "flex", alignItems: "center", gap: 8
     }}>
-      {toast.type === "error" ? "❌" : "✅"} {toast.msg}
+      {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle size={18} />} {toast.msg}
     </div>
   );
 }
@@ -75,7 +77,9 @@ export default function Applications() {
             maxWidth: 400, width: "90%", textAlign: "center",
             boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
           }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>⚠️</div>
+            <div style={{ marginBottom: 12 }}>
+              <AlertCircle size={48} color="#f59e0b" />
+            </div>
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a2340", marginBottom: 8 }}>
               Annuler la candidature ?
             </h3>
@@ -131,7 +135,7 @@ export default function Applications() {
             </div>
           ) : candidatures.length === 0 ? (
             <div style={{ textAlign: "center", padding: "80px 0", color: "#94a3b8" }}>
-              <div style={{ fontSize: 48, marginBottom: 16 }}>📭</div>
+              <Inbox size={48} color="#94a3b8" style={{ marginBottom: 16 }} />
               <p style={{ fontSize: 16, marginBottom: 20 }}>Vous n'avez pas encore postulé à une offre</p>
               <Link to="/candidat/offres" style={{
                 padding: "12px 28px", borderRadius: 12,
@@ -154,15 +158,17 @@ export default function Applications() {
                     <div style={{
                       width: 44, height: 44, borderRadius: 12,
                       background: "#eff6ff", display: "flex",
-                      alignItems: "center", justifyContent: "center", fontSize: 20,
-                    }}>💼</div>
+                      alignItems: "center", justifyContent: "center",
+                    }}>
+                      <Briefcase size={24} color="#2563eb" />
+                    </div>
 
                     <div style={{ flex: 1, minWidth: 160 }}>
                       <h3 style={{ fontSize: 16, fontWeight: 700, color: "#1a2340", margin: 0 }}>
                         {c.offreId?.titre || "Offre supprimée"}
                       </h3>
-                      <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4 }}>
-                        🏢 {c.offreId?.entrepriseId?.nom || "—"} · {c.offreId?.entrepriseId?.secteur || "—"}
+                      <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                        <Building2 size={14} /> {c.offreId?.entrepriseId?.nom || "—"} · {c.offreId?.entrepriseId?.secteur || "—"}
                       </p>
                       <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>
                         Postulé le {new Date(c.createdAt).toLocaleDateString("fr-FR")}
