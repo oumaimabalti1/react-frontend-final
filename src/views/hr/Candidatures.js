@@ -1,53 +1,147 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "components/Navbars/HNavbar.js";
+import {
+  UserCheck, UserX, Briefcase, FileText, CheckCircle, XCircle,
+  Clock, Download, ChevronDown, ChevronUp, Mail, Filter
+} from "lucide-react";
+import HNavbar from "components/Navbars/HNavbar.js";
 import api from "services/api";
 
-function CheckIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
-}
+/* ── Constants ───────────────────────────────────────── */
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-function XIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  );
-}
+const statutConfig = {
+  EN_ATTENTE: { label: "En attente", color: "#d97706", bg: "#fffbeb", icon: Clock },
+  ACCEPTEE:   { label: "Acceptée",   color: "#059669", bg: "#ecfdf5", icon: CheckCircle },
+  REFUSEE:    { label: "Refusée",    color: "#ef4444", bg: "#fef2f2", icon: XCircle },
+};
 
-function Toast({ toast }) {
-  if (!toast) return null;
-  const isError = toast.type === "error";
+/* ── Toast ───────────────────────────────────────────── */
+const Toast = ({ toast }) => !toast ? null : (
+  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#ef4444" : "#10b981", color: "#fff", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
+    {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle size={18} />} {toast.msg}
+  </div>
+);
+
+/* ── Stat card ───────────────────────────────────────── */
+function StatCard({ label, value, color, bg, icon: Icon }) {
   return (
-    <div className={`toast ${isError ? "toast--error" : "toast--success"}`}>
-      <span className={`toast__icon ${isError ? "toast__icon--error" : "toast__icon--success"}`}>
-        {isError ? <XIcon /> : <CheckIcon />}
-      </span>
-      {toast.msg}
+    <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", borderTop: `3px solid ${color}`, display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ width: 46, height: 46, borderRadius: 12, background: bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <Icon size={22} color={color} />
+      </div>
+      <div>
+        <div style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 4, fontWeight: 500 }}>{label}</div>
+      </div>
     </div>
   );
 }
 
-const statutConfig = {
-  EN_ATTENTE: { label: "En attente", cls: "status-badge--pending" },
-  ACCEPTEE:   { label: "Acceptée",   cls: "status-badge--success" },
-  REFUSEE:    { label: "Refusée",    cls: "status-badge--error"   },
-};
+/* ── Candidature card ────────────────────────────────── */
+function CandidatureCard({ c, onAction, actionId }) {
+  const [expanded, setExpanded] = useState(false);
+  const statut = statutConfig[c.statut] || { label: c.statut, color: "#6b7280", bg: "#f1f5f9", icon: Clock };
+  const StatutIcon = statut.icon;
+  const initiale = (c.candidatId?.name || "?")[0].toUpperCase();
+  const accepting = actionId === c._id + "accept";
+  const refusing  = actionId === c._id + "refuse";
 
+  return (
+    <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", borderLeft: `3px solid ${statut.color}` }}>
+      {/* Main row */}
+      <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 24px", flexWrap: "wrap" }}>
+        {/* Avatar */}
+        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 16, color: "#3b82f6", flexShrink: 0 }}>
+          {initiale}
+        </div>
+
+        {/* Info */}
+        <div style={{ flex: 1, minWidth: 160 }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", margin: 0 }}>{c.candidatId?.name || "—"}</p>
+          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 3, display: "flex", alignItems: "center", gap: 4 }}>
+            <Mail size={11} /> {c.candidatId?.email || "—"}
+          </p>
+          <p style={{ fontSize: 12, color: "#64748b", marginTop: 2, display: "flex", alignItems: "center", gap: 4 }}>
+            <Briefcase size={11} /> {c.offreId?.titre || "—"}
+          </p>
+        </div>
+
+        {/* Date */}
+        <p style={{ fontSize: 12, color: "#94a3b8", whiteSpace: "nowrap" }}>
+          {new Date(c.createdAt).toLocaleDateString("fr-FR")}
+        </p>
+
+        {/* Statut badge */}
+        <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
+          <StatutIcon size={12} /> {statut.label}
+        </span>
+
+        {/* Actions */}
+        {c.statut === "EN_ATTENTE" && (
+          <div style={{ display: "flex", gap: 8 }}>
+            <button onClick={() => onAction(c._id, "accept")} disabled={accepting || refusing}
+              style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: accepting ? "#e2e8f0" : "#ecfdf5", color: accepting ? "#94a3b8" : "#059669", fontWeight: 700, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", gap: 5 }}>
+              <UserCheck size={14} /> {accepting ? "..." : "Accepter"}
+            </button>
+            <button onClick={() => onAction(c._id, "refuse")} disabled={accepting || refusing}
+              style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: refusing ? "#e2e8f0" : "#fef2f2", color: refusing ? "#94a3b8" : "#ef4444", fontWeight: 700, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", gap: 5 }}>
+              <UserX size={14} /> {refusing ? "..." : "Refuser"}
+            </button>
+          </div>
+        )}
+
+        {/* Expand toggle */}
+        <button onClick={() => setExpanded(!expanded)}
+          style={{ padding: "7px 12px", borderRadius: 8, border: "1.5px solid #e2e8f0", background: "#fff", color: "#64748b", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, fontSize: 13, fontWeight: 600 }}>
+          {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
+      </div>
+
+      {/* Expanded — CV + offre */}
+      {expanded && (
+        <div style={{ borderTop: "1px solid #f1f5f9", padding: "20px 24px", background: "#fafbfc", display: "flex", gap: 16, flexWrap: "wrap" }}>
+
+          {/* Offre details */}
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Description du poste</p>
+            <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
+              {c.offreId?.description || "Aucune description disponible"}
+            </p>
+          </div>
+
+          {/* CV */}
+          <div style={{ minWidth: 200 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>CV du candidat</p>
+            {c.cv ? (
+              <a
+                href={`${BASE_URL}/images/${c.cv.fichier}`}
+                target="_blank"
+                rel="noreferrer"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 10, background: "linear-gradient(135deg,#3b82f6,#2563eb)", color: "#fff", fontWeight: 700, fontSize: 13, textDecoration: "none", boxShadow: "0 4px 12px rgba(59,130,246,0.3)" }}>
+                <Download size={15} /> Télécharger le CV
+              </a>
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", borderRadius: 10, background: "#f1f5f9", color: "#94a3b8", fontSize: 13 }}>
+                <FileText size={15} /> Aucun CV déposé
+              </div>
+            )}
+          </div>
+
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Main ────────────────────────────────────────────── */
 export default function Candidatures() {
   const [candidatures, setCandidatures] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [actionId, setActionId] = useState(null);
-  const [toast, setToast] = useState(null);
-  const [filter, setFilter] = useState("ALL");
+  const [loading, setLoading]           = useState(true);
+  const [actionId, setActionId]         = useState(null);
+  const [toast, setToast]               = useState(null);
+  const [filter, setFilter]             = useState("ALL");
 
-  const showToast = (msg, type = "success") => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3500);
-  };
+  const showToast = (msg, type = "success") => { setToast({ msg, type }); setTimeout(() => setToast(null), 3500); };
 
   const fetchCandidatures = () => {
     setLoading(true);
@@ -63,102 +157,79 @@ export default function Candidatures() {
     setActionId(id + action);
     try {
       await api.put(`/rh/candidatures/${id}/${action}`);
-      showToast(action === "accept" ? "Candidature acceptée" : "Candidature refusée");
+      showToast(action === "accept" ? "Candidature acceptée !" : "Candidature refusée");
       fetchCandidatures();
     } catch (err) {
       showToast(err.response?.data?.message || "Erreur", "error");
     } finally {
-      setActionId(null);
-    }
+      setActionId(null); }
   };
 
   const filtered = filter === "ALL" ? candidatures : candidatures.filter(c => c.statut === filter);
 
+  const filterBtn = (key, label) => {
+    const count = key === "ALL" ? candidatures.length : candidatures.filter(c => c.statut === key).length;
+    const active = filter === key;
+    return (
+      <button key={key} onClick={() => setFilter(key)}
+        style={{ padding: "8px 18px", borderRadius: 20, border: active ? "none" : "1.5px solid #e2e8f0", background: active ? "#1a2340" : "#fff", color: active ? "#fff" : "#64748b", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
+        {label} ({count})
+      </button>
+    );
+  };
+
   return (
     <>
-      <Navbar />
+      <HNavbar />
       <Toast toast={toast} />
-      <main className="page-root--padded">
-        <div className="page-container">
 
-          <div className="page-header">
-            <h1 className="page-header__title">Candidatures reçues</h1>
-            <p className="page-header__count">
-              {candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""}
-            </p>
+      <main style={{ minHeight: "100vh", background: "#f1f5f9", paddingTop: 80 }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 24px 60px" }}>
+
+          {/* Header */}
+          <div style={{ marginBottom: 28 }}>
+            <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Candidatures reçues</h1>
+            <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>{candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""} au total</p>
           </div>
 
-          <div className="filter-bar">
-            {[
-              { key: "ALL",       label: "Toutes" },
-              { key: "EN_ATTENTE", label: "En attente" },
-              { key: "ACCEPTEE",  label: "Acceptées" },
-              { key: "REFUSEE",   label: "Refusées" },
-            ].map(f => (
-              <button
-                key={f.key}
-                onClick={() => setFilter(f.key)}
-                className={`filter-btn${filter === f.key ? " filter-btn--active" : ""}`}
-              >
-                {f.label}&nbsp;
-                ({f.key === "ALL" ? candidatures.length : candidatures.filter(c => c.statut === f.key).length})
-              </button>
-            ))}
+          {/* Stats */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 28 }}>
+            <StatCard label="Total"       value={candidatures.length}                                    color="#3b82f6" bg="rgba(59,130,246,0.08)"  icon={Briefcase} />
+            <StatCard label="En attente"  value={candidatures.filter(c => c.statut === "EN_ATTENTE").length} color="#d97706" bg="#fffbeb"                icon={Clock} />
+            <StatCard label="Acceptées"   value={candidatures.filter(c => c.statut === "ACCEPTEE").length}  color="#059669" bg="#ecfdf5"                icon={UserCheck} />
+            <StatCard label="Refusées"    value={candidatures.filter(c => c.statut === "REFUSEE").length}   color="#ef4444" bg="#fef2f2"                icon={UserX} />
           </div>
 
+          {/* Filters */}
+          <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+            <Filter size={15} color="#94a3b8" />
+            {filterBtn("ALL", "Toutes")}
+            {filterBtn("EN_ATTENTE", "En attente")}
+            {filterBtn("ACCEPTEE", "Acceptées")}
+            {filterBtn("REFUSEE", "Refusées")}
+          </div>
+
+          {/* List */}
           {loading ? (
-            <div className="skeleton-list">
-              {Array(4).fill(0).map((_, i) => (
-                <div key={i} className="skeleton-item" style={{ height: 100 }} />
-              ))}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {Array(4).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 80, opacity: 0.4 }} />)}
             </div>
           ) : filtered.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-state__icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M9 12h6m-3-3v6M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round"/>
-                </svg>
+            <div style={{ background: "#fff", borderRadius: 20, padding: "64px 24px", textAlign: "center", boxShadow: "0 2px 16px rgba(30,60,120,0.06)" }}>
+              <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(59,130,246,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+                <Briefcase size={26} color="#3b82f6" />
               </div>
-              <p>Aucune candidature</p>
+              <p style={{ color: "#1a2340", fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Aucune candidature</p>
+              <p style={{ color: "#94a3b8", fontSize: 13 }}>Les candidatures apparaîtront ici</p>
             </div>
           ) : (
-            <div className="card-list">
-              {filtered.map(c => {
-                const statut = statutConfig[c.statut] || { label: c.statut, cls: "status-badge--neutral" };
-                return (
-                  <div key={c._id} className="card">
-                    <div className="avatar avatar--green">
-                      {(c.candidatId?.name || "?")[0].toUpperCase()}
-                    </div>
-                    <div className="card-info">
-                      <p className="card-info__name">{c.candidatId?.name}</p>
-                      <p className="card-info__sub">{c.candidatId?.email}</p>
-                      <p className="card-info__meta">{c.offreId?.titre}</p>
-                    </div>
-                    <span className={`status-badge ${statut.cls}`}>{statut.label}</span>
-                    {c.statut === "EN_ATTENTE" && (
-                      <div className="action-group">
-                        <button
-                          className="btn btn--accept"
-                          onClick={() => handleAction(c._id, "accept")}
-                          disabled={actionId === c._id + "accept"}
-                        >
-                          {actionId === c._id + "accept" ? "..." : "Accepter"}
-                        </button>
-                        <button
-                          className="btn btn--reject"
-                          onClick={() => handleAction(c._id, "refuse")}
-                          disabled={actionId === c._id + "refuse"}
-                        >
-                          {actionId === c._id + "refuse" ? "..." : "Refuser"}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {filtered.map(c => (
+                <CandidatureCard key={c._id} c={c} onAction={handleAction} actionId={actionId} />
+              ))}
             </div>
           )}
+
         </div>
       </main>
     </>

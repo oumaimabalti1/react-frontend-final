@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import "assets/styles/ui.css";
+import "assets/styles/tailwind.css";
 
 import Auth from "layouts/Auth.js";
 import User from "layouts/User.js";
