@@ -102,13 +102,13 @@ export default function Offres() {
 
   const openEdit = (offre) => {
     setEditOffre(offre);
-    setForm({ titre: offre.titre, description: offre.description });
+    setForm({ titre: offre.titre, description: offre.description, domaine: offre.domaine || "Autre" });
     setShowForm(true);
   };
 
   const openNew = () => {
     setEditOffre(null);
-    setForm({ titre: "", description: "" });
+    setForm({ titre: "", description: "", domaine: "Autre" });
     setShowForm(true);
   };
 
@@ -200,6 +200,19 @@ export default function Offres() {
                 placeholder="Décrivez le poste, les missions, les compétences requises..."
               />
             </div>
+            <div className="form-group">
+              <label className="form-label">Domaine *</label>
+              <select
+                value={form.domaine}
+                onChange={e => setForm({ ...form, domaine: e.target.value })}
+                required
+                className="form-input"
+              >
+                {["Informatique","Marketing","Finance","RH","Commercial","Juridique","Ingénierie","Design","Communication","Autre"].map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
             <button type="submit" disabled={formLoading} className="btn--full btn--full-primary">
               {formLoading ? "Enregistrement..." : editOffre ? "Mettre à jour" : "Publier l'offre"}
             </button>
@@ -245,9 +258,16 @@ export default function Offres() {
                   <div className="offre-content">
                     <h3 className="offre-content__title">{offre.titre}</h3>
                     <p className="offre-content__desc">{offre.description}</p>
-                    <p className="offre-content__date">
-                      Publié le {new Date(offre.dateCreation || offre.createdAt).toLocaleDateString("fr-FR")}
-                    </p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                      {offre.domaine && (
+                        <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 20, padding: "2px 10px", fontSize: 11, fontWeight: 600 }}>
+                          {offre.domaine}
+                        </span>
+                      )}
+                      <p className="offre-content__date" style={{ margin: 0 }}>
+                        Publié le {new Date(offre.dateCreation || offre.createdAt).toLocaleDateString("fr-FR")}
+                      </p>
+                    </div>
                   </div>
                   <div className="action-group" style={{ flexShrink: 0 }}>
                     <button onClick={() => openEdit(offre)} className="btn btn--edit">

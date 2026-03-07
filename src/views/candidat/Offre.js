@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle, XCircle, Briefcase, UploadCloud, FileText, Mail, Building2, Check, Send, Loader2, UserCheck, X } from "lucide-react";
+import { CheckCircle, XCircle, Briefcase, UploadCloud, FileText, Mail, Building2, Check, Send, Loader2, UserCheck, X, Search, Filter, Clock } from "lucide-react";
 import CNavbar from "components/Navbars/CNavbar.js";
 import OffreCard from "components/Cards/OffreCard.js";
 import api from "services/api";
+
+const DOMAINES = ["Tous", "Informatique", "Marketing", "Finance", "RH", "Commercial", "Juridique", "Ingénierie", "Design", "Communication", "Autre"];
+
+const PERIODES = [
+  { label: "Toutes les dates", value: "" },
+  { label: "Aujourd'hui", value: "today" },
+  { label: "Cette semaine", value: "week" },
+  { label: "Ce mois", value: "month" },
+];
 
 const Toast = ({ toast }) => !toast ? null : (
   <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#ef4444" : "#10b981", color: "#fff", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
@@ -34,16 +43,37 @@ export default function Offre() {
   const [dragOver, setDragOver]         = useState(false);
   const [applying, setApplying]         = useState(false);
   const [applied, setApplied]           = useState(false);
+
+  // ── Filtres ──
+  const [search, setSearch]     = useState("");
+  const [domaine, setDomaine]   = useState("Tous");
+  const [periode, setPeriode]   = useState("");
+
   const fileRef = useRef();
 
   const showToast = (msg, type = "success") => { setToast({ msg, type }); setTimeout(() => setToast(null), 3500); };
 
-  useEffect(() => {
-    api.get("/candidat/offres")
+  const fetchOffres = () => {
+    setLoading(true);
+    const params = {};
+    if (domaine !== "Tous") params.domaine = domaine;
+    if (periode) params.periode = periode;
+    if (search.trim()) params.search = search.trim();
+
+    api.get("/candidat/offres", { params })
       .then(res => setOffres(res.data.offres || []))
       .catch(() => showToast("Erreur chargement des offres", "error"))
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  // Re-fetch quand domaine ou période change
+  useEffect(() => { fetchOffres(); }, [domaine, periode]);
+
+  // Debounce pour la recherche texte
+  useEffect(() => {
+    const timer = setTimeout(() => fetchOffres(), 400);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const openModal = async (offre) => {
     setSelected(offre); setCvFile(null); setCvUploaded(false); setApplied(false);
@@ -78,6 +108,7 @@ export default function Offre() {
   };
 
   const hasCV = existingCV || cvUploaded;
+  const activeFilters = [domaine !== "Tous", periode !== ""].filter(Boolean).length;
 
   return (
     <>
@@ -109,12 +140,17 @@ export default function Offre() {
               </div>
             ) : (
               <>
-                {/* Dark header */}
                 <div style={{ background: "linear-gradient(135deg,#0f172a,#164e63)", borderRadius: "24px 24px 0 0", padding: "28px 36px" }}>
                   <div style={{ width: 46, height: 46, borderRadius: 13, background: "rgba(8,145,178,0.2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
                     <Briefcase size={22} color="#67e8f9" />
                   </div>
                   <h2 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: "0 0 10px" }}>{selected.titre}</h2>
+                  {/* Domaine badge dans modal */}
+                  {selected.domaine && selected.domaine !== "Autre" && (
+                    <span style={{ display: "inline-block", background: "rgba(8,145,178,0.25)", color: "#67e8f9", borderRadius: 20, padding: "3px 12px", fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
+                      {selected.domaine}
+                    </span>
+                  )}
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                     {selected.entrepriseId?.nom     && <span style={{ background: "rgba(255,255,255,0.1)",   color: "#e2e8f0", borderRadius: 20, padding: "3px 12px", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}><Building2 size={12} />{selected.entrepriseId.nom}</span>}
                     {selected.entrepriseId?.secteur && <span style={{ background: "rgba(8,145,178,0.25)",    color: "#67e8f9", borderRadius: 20, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>{selected.entrepriseId.secteur}</span>}
@@ -130,7 +166,6 @@ export default function Offre() {
 
                 <div style={{ height: 1, background: "#f0f2f8", margin: "0 36px" }} />
 
-                {/* CV Section */}
                 <div style={{ padding: "20px 36px 32px" }}>
                   <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", marginBottom: 4, display: "flex", alignItems: "center", gap: 8 }}>
                     <FileText size={16} color="#0891b2" /> Votre CV
@@ -200,24 +235,94 @@ export default function Offre() {
         {/* Hero */}
         <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#164e63 60%,#1e293b 100%)", padding: "64px 24px 80px", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(8,145,178,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
-          <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20 }}>
-            <div>
-              <span style={{ display: "inline-block", background: "rgba(8,145,178,0.15)", color: "#67e8f9", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
-                Portail Candidat
-              </span>
-              <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 10px" }}>Offres d'emploi</h1>
-              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.5)", margin: 0 }}>
-                {loading ? "Chargement..." : `${offres.length} offre${offres.length !== 1 ? "s" : ""} disponible${offres.length !== 1 ? "s" : ""}`}
-              </p>
+          <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20, marginBottom: 28 }}>
+              <div>
+                <span style={{ display: "inline-block", background: "rgba(8,145,178,0.15)", color: "#67e8f9", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+                  Portail Candidat
+                </span>
+                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 10px" }}>Offres d'emploi</h1>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,0.5)", margin: 0 }}>
+                  {loading ? "Chargement..." : `${offres.length} offre${offres.length !== 1 ? "s" : ""} disponible${offres.length !== 1 ? "s" : ""}`}
+                </p>
+              </div>
+              <Link to="/candidat/applications" style={{ padding: "11px 22px", borderRadius: 12, border: "1.5px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.07)", color: "#fff", fontWeight: 600, fontSize: 14, textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
+                <UserCheck size={16} /> Mes candidatures
+              </Link>
             </div>
-            <Link to="/candidat/applications" style={{ padding: "11px 22px", borderRadius: 12, border: "1.5px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.07)", color: "#fff", fontWeight: 600, fontSize: 14, textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
-              <UserCheck size={16} /> Mes candidatures
-            </Link>
+
+            {/* ── Search bar dans le hero ── */}
+            <div style={{ display: "flex", alignItems: "center", background: "rgba(255,255,255,0.1)", borderRadius: 12, padding: "10px 16px", gap: 10, border: "1.5px solid rgba(255,255,255,0.2)" }}>
+              <Search size={18} color="rgba(255,255,255,0.6)" />
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Rechercher un poste, une compétence..."
+                style={{ flex: 1, background: "none", border: "none", outline: "none", color: "white", fontSize: 14 }}
+              />
+              {search && <X size={16} color="rgba(255,255,255,0.6)" style={{ cursor: "pointer" }} onClick={() => setSearch("")} />}
+            </div>
           </div>
         </div>
 
+        {/* ── Barre de filtres ── */}
+        <div style={{ background: "white", borderBottom: "1.5px solid #e2e8f0", padding: "12px 24px", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+          
+          {/* Label filtres */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#64748b", fontSize: 13, fontWeight: 600, marginRight: 4 }}>
+            <Filter size={14} />
+            Filtres
+            {activeFilters > 0 && (
+              <span style={{ background: "#0891b2", color: "white", borderRadius: 10, padding: "1px 7px", fontSize: 11 }}>
+                {activeFilters}
+              </span>
+            )}
+          </div>
+
+          {/* Domaine buttons */}
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {DOMAINES.map(d => (
+              <button
+                key={d}
+                onClick={() => setDomaine(d)}
+                style={{
+                  padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: domaine === d ? 700 : 500,
+                  border: `1.5px solid ${domaine === d ? "#0891b2" : "#e2e8f0"}`,
+                  background: domaine === d ? "#ecfeff" : "white",
+                  color: domaine === d ? "#0891b2" : "#64748b",
+                  cursor: "pointer", transition: "all 0.15s"
+                }}
+              >
+                {d}
+              </button>
+            ))}
+          </div>
+
+          {/* Période dropdown */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <Clock size={14} color="#64748b" />
+            <select
+              value={periode}
+              onChange={e => setPeriode(e.target.value)}
+              style={{ padding: "6px 12px", borderRadius: 20, border: `1.5px solid ${periode ? "#0891b2" : "#e2e8f0"}`, background: periode ? "#ecfeff" : "white", color: periode ? "#0891b2" : "#374151", fontSize: 12, cursor: "pointer", outline: "none", fontWeight: periode ? 700 : 400 }}
+            >
+              {PERIODES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+            </select>
+          </div>
+
+          {/* Reset */}
+          {activeFilters > 0 && (
+            <button
+              onClick={() => { setDomaine("Tous"); setPeriode(""); setSearch(""); }}
+              style={{ padding: "6px 14px", borderRadius: 20, border: "1.5px solid #fca5a5", background: "#fff", color: "#ef4444", fontSize: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
+            >
+              <X size={12} /> Réinitialiser
+            </button>
+          )}
+        </div>
+
         {/* Grid */}
-        <div style={{ maxWidth: 1100, margin: "-32px auto 0", padding: "0 24px 60px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px 60px" }}>
           {loading ? (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20 }}>
               {Array(6).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 18, height: 200, opacity: 0.4 }} />)}
@@ -227,7 +332,8 @@ export default function Offre() {
               <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                 <Briefcase size={32} color="#cbd5e1" />
               </div>
-              <p style={{ fontSize: 15, fontWeight: 600 }}>Aucune offre disponible pour le moment</p>
+              <p style={{ fontSize: 15, fontWeight: 600, color: "#1a2340" }}>Aucune offre trouvée</p>
+              <p style={{ fontSize: 13, color: "#94a3b8", marginTop: 6 }}>Essayez d'autres filtres</p>
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20 }}>
