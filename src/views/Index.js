@@ -203,7 +203,7 @@ export default function Index() {
         <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 15, marginBottom: 36 }}>
           Rejoignez EasyRH et transformez votre gestion des ressources humaines.
         </p>
-        <Link to="/Landing" style={{ textDecoration: "none" }}>
+        <Link to="/contactus" style={{ textDecoration: "none" }}>
           <button style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "14px 36px", borderRadius: 50, border: "none",
