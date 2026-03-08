@@ -10,8 +10,8 @@ import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import Index from "views/Index.js";
 import Aboutus from "views/Aboutus.js";
-import Whyus from "views/Whyus";
-
+import Whyus from "views/Whyus.js";
+import Contactus from "views/Contactus.js";
 const root = createRoot(document.getElementById("root"));
 
 root.render(
@@ -27,6 +27,7 @@ root.render(
       <Route path="/aboutus" exact component={Aboutus} />
       <Route path="/profile" exact component={Profile} />
       <Route path="/" exact component={Index} />
+        <Route path="/contactus" exact component={Contactus} /> 
       <Redirect from="*" to="/" />
     </Switch>
   </BrowserRouter>

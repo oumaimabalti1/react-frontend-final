@@ -20,8 +20,8 @@ export default function FreeNavbar() {
         </div>
 
         <div style={{ display:"flex",alignItems:"center",gap:10 }}>
-          <Link to="/auth/login" style={{ textDecoration:"none" }}>
-            <button style={{ padding:"8px 18px",borderRadius:50,border:"1.5px solid rgba(255,255,255,0.15)",background:"transparent",color:"rgba(255,255,255,0.75)",fontSize:13,fontWeight:600,cursor:"pointer" }}>Se connecter</button>
+          <Link to="/contactus" style={{ textDecoration:"none" }}>
+            <button style={{ padding:"8px 18px",borderRadius:50,border:"1.5px solid rgba(255,255,255,0.15)",background:"transparent",color:"rgba(255,255,255,0.75)",fontSize:13,fontWeight:600,cursor:"pointer" }}>Contact</button>
           </Link>
           <Link to="/Landing" style={{ textDecoration:"none" }}>
             <button style={{ padding:"8px 18px",borderRadius:50,border:"none",background:"linear-gradient(135deg,#2563eb,#7c3aed)",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 14px rgba(37,99,235,0.35)" }}>Commencer</button>
