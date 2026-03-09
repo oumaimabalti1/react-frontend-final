@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "components/Navbars/CNavbar.js";
 import api from "services/api";
-import { Briefcase, Inbox, AlertCircle, CheckCircle, XCircle, Building2 } from "lucide-react";
+import { Briefcase, Inbox, AlertCircle, CheckCircle, XCircle, Building2, Calendar, MessageSquare } from "lucide-react";
 
 function Toast({ toast }) {
   if (!toast) return null;
@@ -175,14 +175,28 @@ export default function Applications() {
                       </p>
                     </div>
 
-                    {/* Statut */}
-                    <span style={{
-                      background: statut.bg, color: statut.color,
-                      borderRadius: 20, padding: "6px 16px",
-                      fontSize: 13, fontWeight: 700,
-                    }}>
-                      {statut.label}
-                    </span>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+                      <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "6px 16px", fontSize: 13, fontWeight: 700 }}>
+                        {statut.label}
+                      </span>
+                      {c.statut === "ACCEPTEE" && c.dateInterview && (
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#ecfdf5", border: "1.5px solid #86efac", borderRadius: 10, padding: "8px 14px" }}>
+                          <Calendar size={14} color="#059669" />
+                          <div>
+                            <p style={{ fontSize: 11, fontWeight: 700, color: "#059669", margin: 0, textTransform: "uppercase" }}>Entretien</p>
+                            <p style={{ fontSize: 13, fontWeight: 600, color: "#065f46", margin: 0 }}>
+                              {new Date(c.dateInterview).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" })} à {new Date(c.dateInterview).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {c.messageRH && (
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: 6, background: c.statut === "ACCEPTEE" ? "#ecfdf5" : "#fef2f2", border: `1.5px solid ${c.statut === "ACCEPTEE" ? "#86efac" : "#fca5a5"}`, borderRadius: 10, padding: "8px 14px", maxWidth: 280 }}>
+                          <MessageSquare size={14} color={c.statut === "ACCEPTEE" ? "#059669" : "#ef4444"} style={{ marginTop: 2, flexShrink: 0 }} />
+                          <p style={{ fontSize: 13, color: c.statut === "ACCEPTEE" ? "#065f46" : "#991b1b", margin: 0, lineHeight: 1.5 }}>{c.messageRH}</p>
+                        </div>
+                      )}
+                    </div>
 
                     {/* Annuler si EN_ATTENTE */}
                     {c.statut === "EN_ATTENTE" && (

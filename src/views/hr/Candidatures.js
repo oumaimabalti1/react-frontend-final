@@ -140,6 +140,9 @@ export default function Candidatures() {
   const [actionId, setActionId]         = useState(null);
   const [toast, setToast]               = useState(null);
   const [filter, setFilter]             = useState("ALL");
+  const [modal, setModal]               = useState(null); // { id, action }
+  const [dateInterview, setDateInterview] = useState("");
+  const [messageRH, setMessageRH]       = useState("");
 
   const showToast = (msg, type = "success") => { setToast({ msg, type }); setTimeout(() => setToast(null), 3500); };
 
@@ -153,16 +156,33 @@ export default function Candidatures() {
 
   useEffect(() => { fetchCandidatures(); }, []);
 
+  const [interviewModal, setInterviewModal] = useState(null); // { id }
+  const [dateInterview, setDateInterview]   = useState("");
+
   const handleAction = async (id, action) => {
+    if (action === "accept") { setInterviewModal({ id }); setDateInterview(""); return; }
     setActionId(id + action);
     try {
-      await api.put(`/rh/candidatures/${id}/${action}`);
-      showToast(action === "accept" ? "Candidature acceptée !" : "Candidature refusée");
+      await api.put(`/rh/candidatures/${id}/refuse`);
+      showToast("Candidature refusée");
       fetchCandidatures();
     } catch (err) {
       showToast(err.response?.data?.message || "Erreur", "error");
-    } finally {
-      setActionId(null); }
+    } finally { setActionId(null); }
+  };
+
+  const handleAccept = async () => {
+    if (!dateInterview) { showToast("Veuillez choisir une date d'interview", "error"); return; }
+    const id = interviewModal.id;
+    setActionId(id + "accept");
+    setInterviewModal(null);
+    try {
+      await api.put(`/rh/candidatures/${id}/accept`, { dateInterview });
+      showToast("Candidature acceptée !");
+      fetchCandidatures();
+    } catch (err) {
+      showToast(err.response?.data?.message || "Erreur", "error");
+    } finally { setActionId(null); }
   };
 
   const filtered = filter === "ALL" ? candidatures : candidatures.filter(c => c.statut === filter);
@@ -182,6 +202,77 @@ export default function Candidatures() {
     <>
       <HNavbar />
       <Toast toast={toast} />
+
+      {/* Interview Modal */}
+      {interviewModal && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div style={{ background: "#fff", borderRadius: 20, padding: "36px", width: "100%", maxWidth: 420, boxShadow: "0 8px 40px rgba(0,0,0,0.15)" }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#1a2340", marginBottom: 8 }}>Planifier l'interview</h3>
+            <p style={{ fontSize: 14, color: "#94a3b8", marginBottom: 24 }}>Choisissez la date et l'heure de l'interview</p>
+            <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>Date et heure *</label>
+            <input
+              type="datetime-local"
+              value={dateInterview}
+              onChange={e => setDateInterview(e.target.value)}
+              style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, outline: "none", boxSizing: "border-box", marginBottom: 24 }}
+            />
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={() => setInterviewModal(null)} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>
+                Annuler
+              </button>
+              <button onClick={handleAccept} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "linear-gradient(135deg,#059669,#047857)", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Action Modal */}
+      {modal && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div style={{ background: "#fff", borderRadius: 20, padding: "36px", width: "100%", maxWidth: 440, boxShadow: "0 8px 40px rgba(0,0,0,0.15)" }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#1a2340", marginBottom: 6 }}>
+              {modal.action === "accept" ? "✅ Accepter la candidature" : "❌ Refuser la candidature"}
+            </h3>
+            <p style={{ fontSize: 14, color: "#94a3b8", marginBottom: 24 }}>
+              {modal.action === "accept" ? "Définissez la date d'entretien et un message pour le candidat." : "Vous pouvez laisser un message au candidat."}
+            </p>
+
+            {modal.action === "accept" && (
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>Date et heure de l'entretien *</label>
+                <input
+                  type="datetime-local"
+                  value={dateInterview}
+                  onChange={e => setDateInterview(e.target.value)}
+                  style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, outline: "none", boxSizing: "border-box" }}
+                />
+              </div>
+            )}
+
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>Message pour le candidat</label>
+              <textarea
+                value={messageRH}
+                onChange={e => setMessageRH(e.target.value)}
+                rows={3}
+                placeholder="Ex: Merci pour votre candidature, nous vous attendons..."
+                style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, outline: "none", resize: "vertical", boxSizing: "border-box", fontFamily: "inherit" }}
+              />
+            </div>
+
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={() => setModal(null)} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>
+                Annuler
+              </button>
+              <button onClick={handleConfirm} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: modal.action === "accept" ? "linear-gradient(135deg,#059669,#047857)" : "linear-gradient(135deg,#ef4444,#dc2626)", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main style={{ minHeight: "100vh", background: "#f1f5f9", paddingTop: 80 }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 24px 60px" }}>

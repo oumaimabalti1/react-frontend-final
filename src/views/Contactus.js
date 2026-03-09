@@ -69,7 +69,7 @@ export default function ContactUs() {
 
               {[
                 { icon: Mail,    label: "Email",    value: "baltioumaima1@gmail.com" },
-                { icon: Phone,   label: "Téléphone", value: "+216 XX XXX XXX" },
+                { icon: Phone,   label: "Téléphone", value: "+216 00 000 000" },
                 { icon: MapPin,  label: "Adresse",  value: "Tunis, Tunisie" },
                 { icon: Clock,   label: "Horaires", value: "Lun–Ven, 9h–18h" },
               ].map(({ icon: Icon, label, value }) => (
