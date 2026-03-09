@@ -48,14 +48,10 @@ function CandidatureCard({ c, onAction, actionId }) {
 
   return (
     <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", borderLeft: `3px solid ${statut.color}` }}>
-      {/* Main row */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 24px", flexWrap: "wrap" }}>
-        {/* Avatar */}
         <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 16, color: "#3b82f6", flexShrink: 0 }}>
           {initiale}
         </div>
-
-        {/* Info */}
         <div style={{ flex: 1, minWidth: 160 }}>
           <p style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", margin: 0 }}>{c.candidatId?.name || "—"}</p>
           <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 3, display: "flex", alignItems: "center", gap: 4 }}>
@@ -65,18 +61,12 @@ function CandidatureCard({ c, onAction, actionId }) {
             <Briefcase size={11} /> {c.offreId?.titre || "—"}
           </p>
         </div>
-
-        {/* Date */}
         <p style={{ fontSize: 12, color: "#94a3b8", whiteSpace: "nowrap" }}>
           {new Date(c.createdAt).toLocaleDateString("fr-FR")}
         </p>
-
-        {/* Statut badge */}
         <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
           <StatutIcon size={12} /> {statut.label}
         </span>
-
-        {/* Actions */}
         {c.statut === "EN_ATTENTE" && (
           <div style={{ display: "flex", gap: 8 }}>
             <button onClick={() => onAction(c._id, "accept")} disabled={accepting || refusing}
@@ -89,35 +79,23 @@ function CandidatureCard({ c, onAction, actionId }) {
             </button>
           </div>
         )}
-
-        {/* Expand toggle */}
         <button onClick={() => setExpanded(!expanded)}
           style={{ padding: "7px 12px", borderRadius: 8, border: "1.5px solid #e2e8f0", background: "#fff", color: "#64748b", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, fontSize: 13, fontWeight: 600 }}>
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
         </button>
       </div>
 
-      {/* Expanded — CV + offre */}
       {expanded && (
         <div style={{ borderTop: "1px solid #f1f5f9", padding: "20px 24px", background: "#fafbfc", display: "flex", gap: 16, flexWrap: "wrap" }}>
-
-          {/* Offre details */}
           <div style={{ flex: 1, minWidth: 200 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Description du poste</p>
-            <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>
-              {c.offreId?.description || "Aucune description disponible"}
-            </p>
+            <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, margin: 0 }}>{c.offreId?.description || "Aucune description disponible"}</p>
           </div>
-
-          {/* CV */}
           <div style={{ minWidth: 200 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>CV du candidat</p>
             {c.cv ? (
-              <a
-                href={`${BASE_URL}/images/${c.cv.fichier}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 10, background: "linear-gradient(135deg,#3b82f6,#2563eb)", color: "#fff", fontWeight: 700, fontSize: 13, textDecoration: "none", boxShadow: "0 4px 12px rgba(59,130,246,0.3)" }}>
+              <a href={`${BASE_URL}/images/${c.cv.fichier}`} target="_blank" rel="noreferrer"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 10, background: "linear-gradient(135deg,#3b82f6,#2563eb)", color: "#fff", fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
                 <Download size={15} /> Télécharger le CV
               </a>
             ) : (
@@ -126,7 +104,6 @@ function CandidatureCard({ c, onAction, actionId }) {
               </div>
             )}
           </div>
-
         </div>
       )}
     </div>
@@ -140,9 +117,9 @@ export default function Candidatures() {
   const [actionId, setActionId]         = useState(null);
   const [toast, setToast]               = useState(null);
   const [filter, setFilter]             = useState("ALL");
-  const [modal, setModal]               = useState(null); // { id, action }
+  const [modal, setModal]               = useState(null);
   const [dateInterview, setDateInterview] = useState("");
-  const [messageRH, setMessageRH]       = useState("");
+  const [messageRH, setMessageRH]         = useState("");
 
   const showToast = (msg, type = "success") => { setToast({ msg, type }); setTimeout(() => setToast(null), 3500); };
 
@@ -156,33 +133,31 @@ export default function Candidatures() {
 
   useEffect(() => { fetchCandidatures(); }, []);
 
-  const [interviewModal, setInterviewModal] = useState(null); // { id }
-  const [dateInterview, setDateInterview]   = useState("");
-
-  const handleAction = async (id, action) => {
-    if (action === "accept") { setInterviewModal({ id }); setDateInterview(""); return; }
-    setActionId(id + action);
-    try {
-      await api.put(`/rh/candidatures/${id}/refuse`);
-      showToast("Candidature refusée");
-      fetchCandidatures();
-    } catch (err) {
-      showToast(err.response?.data?.message || "Erreur", "error");
-    } finally { setActionId(null); }
+  const handleAction = (id, action) => {
+    setModal({ id, action });
+    setDateInterview("");
+    setMessageRH("");
   };
 
-  const handleAccept = async () => {
-    if (!dateInterview) { showToast("Veuillez choisir une date d'interview", "error"); return; }
-    const id = interviewModal.id;
-    setActionId(id + "accept");
-    setInterviewModal(null);
+  const handleConfirm = async () => {
+    if (modal.action === "accept" && !dateInterview) {
+      showToast("Veuillez choisir une date d'entretien", "error");
+      return;
+    }
+    const { id, action } = modal;
+    setModal(null);
+    setActionId(id + action);
     try {
-      await api.put(`/rh/candidatures/${id}/accept`, { dateInterview });
-      showToast("Candidature acceptée !");
+      const body = { messageRH };
+      if (action === "accept") body.dateInterview = dateInterview;
+      await api.put(`/rh/candidatures/${id}/${action}`, body);
+      showToast(action === "accept" ? "Candidature acceptée !" : "Candidature refusée");
       fetchCandidatures();
     } catch (err) {
       showToast(err.response?.data?.message || "Erreur", "error");
-    } finally { setActionId(null); }
+    } finally {
+      setActionId(null);
+    }
   };
 
   const filtered = filter === "ALL" ? candidatures : candidatures.filter(c => c.statut === filter);
@@ -203,32 +178,6 @@ export default function Candidatures() {
       <HNavbar />
       <Toast toast={toast} />
 
-      {/* Interview Modal */}
-      {interviewModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-          <div style={{ background: "#fff", borderRadius: 20, padding: "36px", width: "100%", maxWidth: 420, boxShadow: "0 8px 40px rgba(0,0,0,0.15)" }}>
-            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#1a2340", marginBottom: 8 }}>Planifier l'interview</h3>
-            <p style={{ fontSize: 14, color: "#94a3b8", marginBottom: 24 }}>Choisissez la date et l'heure de l'interview</p>
-            <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>Date et heure *</label>
-            <input
-              type="datetime-local"
-              value={dateInterview}
-              onChange={e => setDateInterview(e.target.value)}
-              style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, outline: "none", boxSizing: "border-box", marginBottom: 24 }}
-            />
-            <div style={{ display: "flex", gap: 10 }}>
-              <button onClick={() => setInterviewModal(null)} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>
-                Annuler
-              </button>
-              <button onClick={handleAccept} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "linear-gradient(135deg,#059669,#047857)", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
-                Confirmer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Action Modal */}
       {modal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
           <div style={{ background: "#fff", borderRadius: 20, padding: "36px", width: "100%", maxWidth: 440, boxShadow: "0 8px 40px rgba(0,0,0,0.15)" }}>
@@ -236,12 +185,16 @@ export default function Candidatures() {
               {modal.action === "accept" ? "✅ Accepter la candidature" : "❌ Refuser la candidature"}
             </h3>
             <p style={{ fontSize: 14, color: "#94a3b8", marginBottom: 24 }}>
-              {modal.action === "accept" ? "Définissez la date d'entretien et un message pour le candidat." : "Vous pouvez laisser un message au candidat."}
+              {modal.action === "accept"
+                ? "Définissez la date d'entretien et un message pour le candidat."
+                : "Vous pouvez laisser un message d'explication au candidat."}
             </p>
 
             {modal.action === "accept" && (
               <div style={{ marginBottom: 16 }}>
-                <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>Date et heure de l'entretien *</label>
+                <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>
+                  Date et heure de l'entretien *
+                </label>
                 <input
                   type="datetime-local"
                   value={dateInterview}
@@ -252,21 +205,27 @@ export default function Candidatures() {
             )}
 
             <div style={{ marginBottom: 24 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>Message pour le candidat</label>
+              <label style={{ fontSize: 13, fontWeight: 600, color: "#374151", display: "block", marginBottom: 8 }}>
+                Message pour le candidat <span style={{ color: "#94a3b8", fontWeight: 400 }}>(optionnel)</span>
+              </label>
               <textarea
                 value={messageRH}
                 onChange={e => setMessageRH(e.target.value)}
                 rows={3}
-                placeholder="Ex: Merci pour votre candidature, nous vous attendons..."
+                placeholder={modal.action === "accept"
+                  ? "Ex: Merci pour votre candidature, nous avons le plaisir de vous inviter..."
+                  : "Ex: Merci pour votre candidature. Votre profil ne correspond pas à nos besoins actuels..."}
                 style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, outline: "none", resize: "vertical", boxSizing: "border-box", fontFamily: "inherit" }}
               />
             </div>
 
             <div style={{ display: "flex", gap: 10 }}>
-              <button onClick={() => setModal(null)} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>
+              <button onClick={() => setModal(null)}
+                style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>
                 Annuler
               </button>
-              <button onClick={handleConfirm} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: modal.action === "accept" ? "linear-gradient(135deg,#059669,#047857)" : "linear-gradient(135deg,#ef4444,#dc2626)", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
+              <button onClick={handleConfirm}
+                style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: modal.action === "accept" ? "linear-gradient(135deg,#059669,#047857)" : "linear-gradient(135deg,#ef4444,#dc2626)", color: "#fff", fontWeight: 700, cursor: "pointer" }}>
                 Confirmer
               </button>
             </div>
@@ -277,21 +236,18 @@ export default function Candidatures() {
       <main style={{ minHeight: "100vh", background: "#f1f5f9", paddingTop: 80 }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 24px 60px" }}>
 
-          {/* Header */}
           <div style={{ marginBottom: 28 }}>
             <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Candidatures reçues</h1>
             <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>{candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""} au total</p>
           </div>
 
-          {/* Stats */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 28 }}>
-            <StatCard label="Total"       value={candidatures.length}                                    color="#3b82f6" bg="rgba(59,130,246,0.08)"  icon={Briefcase} />
-            <StatCard label="En attente"  value={candidatures.filter(c => c.statut === "EN_ATTENTE").length} color="#d97706" bg="#fffbeb"                icon={Clock} />
-            <StatCard label="Acceptées"   value={candidatures.filter(c => c.statut === "ACCEPTEE").length}  color="#059669" bg="#ecfdf5"                icon={UserCheck} />
-            <StatCard label="Refusées"    value={candidatures.filter(c => c.statut === "REFUSEE").length}   color="#ef4444" bg="#fef2f2"                icon={UserX} />
+            <StatCard label="Total"      value={candidatures.length}                                        color="#3b82f6" bg="rgba(59,130,246,0.08)" icon={Briefcase} />
+            <StatCard label="En attente" value={candidatures.filter(c => c.statut === "EN_ATTENTE").length} color="#d97706" bg="#fffbeb"               icon={Clock} />
+            <StatCard label="Acceptées"  value={candidatures.filter(c => c.statut === "ACCEPTEE").length}  color="#059669" bg="#ecfdf5"               icon={UserCheck} />
+            <StatCard label="Refusées"   value={candidatures.filter(c => c.statut === "REFUSEE").length}   color="#ef4444" bg="#fef2f2"               icon={UserX} />
           </div>
 
-          {/* Filters */}
           <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
             <Filter size={15} color="#94a3b8" />
             {filterBtn("ALL", "Toutes")}
@@ -300,7 +256,6 @@ export default function Candidatures() {
             {filterBtn("REFUSEE", "Refusées")}
           </div>
 
-          {/* List */}
           {loading ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {Array(4).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 80, opacity: 0.4 }} />)}
