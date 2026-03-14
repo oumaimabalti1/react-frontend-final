@@ -1,280 +1,199 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "components/Navbars/HNavbar.js";
+import { Briefcase, Plus, X, Edit2, Trash2, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import api from "services/api";
 
-function CheckIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
-}
-
-function XIcon({ size = 12 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 12 12" fill="none">
-      <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-function BriefcaseIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
-      <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-function EditIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" strokeLinecap="round"/>
-      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-function TrashIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <polyline points="3 6 5 6 21 6"/>
-      <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" strokeLinecap="round"/>
-      <path d="M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-function WarningIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-function EmptyIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M9 13h6m-3-3v6M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-function Toast({ toast }) {
-  if (!toast) return null;
-  const isError = toast.type === "error";
-  return (
-    <div className={`toast ${isError ? "toast--error" : "toast--success"}`}>
-      <span className={`toast__icon ${isError ? "toast__icon--error" : "toast__icon--success"}`}>
-        {isError ? <XIcon /> : <CheckIcon />}
-      </span>
-      {toast.msg}
-    </div>
-  );
-}
+const Toast = ({ toast }) => !toast ? null : (
+  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#ef4444" : "#10b981", color: "#fff", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
+    {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle size={18} />} {toast.msg}
+  </div>
+);
 
 export default function Offres() {
   const [offres, setOffres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editOffre, setEditOffre] = useState(null);
-  const [form, setForm] = useState({ titre: "", description: "" });
+  const [form, setForm] = useState({ titre: "", description: "", domaine: "Autre" });
   const [formLoading, setFormLoading] = useState(false);
   const [confirmId, setConfirmId] = useState(null);
   const [toast, setToast] = useState(null);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
 
-  const showToast = (msg, type = "success") => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3500);
-  };
+  const showToast = (msg, type = "success") => { setToast({ msg, type }); setTimeout(() => setToast(null), 3500); };
 
   const fetchOffres = () => {
     setLoading(true);
-    api.get("/rh/offres")
-      .then(res => setOffres(res.data.offres || []))
-      .catch(() => showToast("Erreur chargement offres", "error"))
-      .finally(() => setLoading(false));
+    api.get("/rh/offres").then(res => setOffres(res.data.offres || [])).catch(() => showToast("Erreur chargement offres", "error")).finally(() => setLoading(false));
   };
 
   useEffect(() => { fetchOffres(); }, []);
 
-  const openEdit = (offre) => {
-    setEditOffre(offre);
-    setForm({ titre: offre.titre, description: offre.description, domaine: offre.domaine || "Autre" });
-    setShowForm(true);
-  };
+  const openEdit = (offre) => { setEditOffre(offre); setForm({ titre: offre.titre, description: offre.description, domaine: offre.domaine || "Autre" }); setShowForm(true); };
+  const openNew = () => { setEditOffre(null); setForm({ titre: "", description: "", domaine: "Autre" }); setAiPrompt(""); setShowForm(true); };
 
-  const openNew = () => {
-    setEditOffre(null);
-    setForm({ titre: "", description: "", domaine: "Autre" });
-    setShowForm(true);
+  const generateWithAI = async () => {
+    if (!aiPrompt.trim()) { showToast("Décrivez d'abord le poste", "error"); return; }
+    setAiLoading(true);
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514", max_tokens: 1000,
+          system: "Tu es un expert RH. Génère une offre d'emploi professionnelle en français. Réponds UNIQUEMENT en JSON valide avec exactement deux champs: {\"titre\": \"...\", \"description\": \"...\"}. Le titre doit être concis (max 8 mots). La description doit être détaillée (150-200 mots).",
+          messages: [{ role: "user", content: `Génère une offre d'emploi pour ce poste : ${aiPrompt}` }]
+        })
+      });
+      const data = await response.json();
+      const text = data.content?.[0]?.text || "";
+      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+      setForm(f => ({ ...f, titre: parsed.titre || f.titre, description: parsed.description || f.description }));
+      showToast("Offre générée avec succès !");
+    } catch { showToast("Erreur génération IA", "error"); }
+    finally { setAiLoading(false); }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormLoading(true);
+    e.preventDefault(); setFormLoading(true);
     try {
-      if (editOffre) {
-        await api.put(`/rh/offres/${editOffre._id}`, form);
-        showToast("Offre mise à jour");
-      } else {
-        await api.post("/rh/offres", form);
-        showToast("Offre publiée avec succès");
-      }
-      setShowForm(false);
-      setEditOffre(null);
-      fetchOffres();
-    } catch (err) {
-      showToast(err.response?.data?.message || "Erreur", "error");
-    } finally {
-      setFormLoading(false);
-    }
+      if (editOffre) { await api.put(`/rh/offres/${editOffre._id}`, form); showToast("Offre mise à jour"); }
+      else { await api.post("/rh/offres", form); showToast("Offre publiée avec succès"); }
+      setShowForm(false); setEditOffre(null); fetchOffres();
+    } catch (err) { showToast(err.response?.data?.message || "Erreur", "error"); }
+    finally { setFormLoading(false); }
   };
 
   const handleDelete = async (id) => {
-    try {
-      await api.delete(`/rh/offres/${id}`);
-      showToast("Offre supprimée");
-      fetchOffres();
-    } catch {
-      showToast("Erreur suppression", "error");
-    } finally {
-      setConfirmId(null);
-    }
+    try { await api.delete(`/rh/offres/${id}`); showToast("Offre supprimée"); fetchOffres(); }
+    catch { showToast("Erreur suppression", "error"); }
+    finally { setConfirmId(null); }
   };
+
+  const input = { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", boxSizing: "border-box", fontFamily: "inherit" };
+  const label = { fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
 
   return (
     <>
       <Navbar />
       <Toast toast={toast} />
 
+      {/* Delete confirm modal */}
       {confirmId && (
-        <div className="modal-backdrop">
-          <div className="modal modal--sm">
-            <div className="modal__warning-icon">
-              <WarningIcon />
+        <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.55)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div style={{ background: "#fff", borderRadius: 20, padding: 40, maxWidth: 400, width: "100%", textAlign: "center" }}>
+            <div style={{ width: 60, height: 60, borderRadius: "50%", background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+              <AlertTriangle size={28} color="#ef4444" />
             </div>
-            <h3 className="modal__title--lg">Supprimer l'offre ?</h3>
-            <p className="modal__text">Cette action est irréversible.</p>
-            <div className="modal__actions">
-              <button onClick={() => setConfirmId(null)} className="modal__cancel-btn">
-                Annuler
-              </button>
-              <button onClick={() => handleDelete(confirmId)} className="modal__delete-btn">
-                Supprimer
-              </button>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a2340", marginBottom: 8 }}>Supprimer l'offre ?</h3>
+            <p style={{ color: "#6b7280", marginBottom: 32 }}>Cette action est irréversible.</p>
+            <div style={{ display: "flex", gap: 12 }}>
+              <button onClick={() => setConfirmId(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: "2px solid #e5e7eb", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>Annuler</button>
+              <button onClick={() => handleDelete(confirmId)} style={{ flex: 1, padding: 11, borderRadius: 10, border: "none", background: "#ef4444", color: "#fff", fontWeight: 700, cursor: "pointer" }}>Supprimer</button>
             </div>
           </div>
         </div>
       )}
 
+      {/* Form modal */}
       {showForm && (
-        <div className="modal-backdrop">
-          <form onSubmit={handleSubmit} className="modal modal--lg">
-            <button type="button" onClick={() => setShowForm(false)} className="modal__close">
-              <XIcon />
+        <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.55)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div style={{ background: "#fff", borderRadius: 20, padding: "32px 36px", width: "100%", maxWidth: 560, boxShadow: "0 8px 40px rgba(0,0,0,0.2)", position: "relative", maxHeight: "90vh", overflowY: "auto" }}>
+            <button onClick={() => setShowForm(false)} style={{ position: "absolute", top: 14, right: 14, background: "#f1f5f9", border: "none", borderRadius: 8, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <X size={16} color="#64748b" />
             </button>
-            <h2 className="modal__title">
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1a2340", marginBottom: 20 }}>
               {editOffre ? "Modifier l'offre" : "Publier une offre"}
             </h2>
-            <div className="form-group" style={{ marginTop: 20 }}>
-              <label className="form-label">Titre *</label>
-              <input
-                value={form.titre}
-                onChange={e => setForm({ ...form, titre: e.target.value })}
-                required
-                className="form-input"
-                placeholder="Ex: Développeur Full Stack"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Description *</label>
-              <textarea
-                value={form.description}
-                onChange={e => setForm({ ...form, description: e.target.value })}
-                required
-                rows={5}
-                className="form-textarea"
-                placeholder="Décrivez le poste, les missions, les compétences requises..."
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Domaine *</label>
-              <select
-                value={form.domaine}
-                onChange={e => setForm({ ...form, domaine: e.target.value })}
-                required
-                className="form-input"
-              >
-                {["Informatique","Marketing","Finance","RH","Commercial","Juridique","Ingénierie","Design","Communication","Autre"].map(d => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
-            </div>
-            <button type="submit" disabled={formLoading} className="btn--full btn--full-primary">
-              {formLoading ? "Enregistrement..." : editOffre ? "Mettre à jour" : "Publier l'offre"}
-            </button>
-          </form>
+
+            {/* AI Generator */}
+            {!editOffre && (
+              <div style={{ background: "linear-gradient(135deg,#eff6ff,#f0fdf4)", border: "1.5px solid #bfdbfe", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                  <span style={{ fontSize: 18 }}>✨</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "#1e3a5f" }}>Générer avec l'IA</span>
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <input type="text" value={aiPrompt} onChange={e => setAiPrompt(e.target.value)} onKeyDown={e => e.key === "Enter" && (e.preventDefault(), generateWithAI())} placeholder="Ex: Développeur React senior..." style={{ ...input, flex: 1 }} />
+                  <button type="button" onClick={generateWithAI} disabled={aiLoading} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: aiLoading ? "#e2e8f0" : "linear-gradient(135deg,#2563eb,#1d4ed8)", color: aiLoading ? "#94a3b8" : "#fff", fontWeight: 700, fontSize: 13, cursor: aiLoading ? "not-allowed" : "pointer", whiteSpace: "nowrap" }}>
+                    {aiLoading ? "⏳..." : "✨ Générer"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <div style={{ marginBottom: 16 }}><label style={label}>Titre *</label><input value={form.titre} onChange={e => setForm({ ...form, titre: e.target.value })} required style={input} placeholder="Ex: Développeur Full Stack" /></div>
+              <div style={{ marginBottom: 16 }}>
+                <label style={label}>Description *</label>
+                <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required rows={5} style={{ ...input, resize: "vertical" }} placeholder="Décrivez le poste..." />
+              </div>
+              <div style={{ marginBottom: 20 }}>
+                <label style={label}>Domaine *</label>
+                <select value={form.domaine} onChange={e => setForm({ ...form, domaine: e.target.value })} required style={input}>
+                  {["Informatique","Marketing","Finance","RH","Commercial","Juridique","Ingénierie","Design","Communication","Autre"].map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
+              </div>
+              <button type="submit" disabled={formLoading} style={{ width: "100%", padding: 13, borderRadius: 12, border: "none", background: "linear-gradient(135deg,#2563eb,#1d4ed8)", color: "#fff", fontWeight: 700, fontSize: 15, cursor: formLoading ? "not-allowed" : "pointer" }}>
+                {formLoading ? "Enregistrement..." : editOffre ? "Mettre à jour" : "Publier l'offre"}
+              </button>
+            </form>
+          </div>
         </div>
       )}
 
-      <main className="page-root--padded">
-        <div className="page-container">
-
-          <div className="page-header--row">
-            <div>
-              <h1 className="page-header__title">Gestion des Offres</h1>
-              <p className="page-header__count">
-                {offres.length} offre{offres.length !== 1 ? "s" : ""}
-              </p>
+      <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
+        {/* Hero */}
+        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "64px 24px 80px", position: "relative", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(37,99,235,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
+          <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
+            <span style={{ display: "inline-block", background: "rgba(37,99,235,0.15)", color: "#93c5fd", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+              Portail RH
+            </span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+              <div>
+                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Gestion des Offres</h1>
+                <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, margin: 0 }}>{offres.length} offre{offres.length !== 1 ? "s" : ""}</p>
+              </div>
+              <button onClick={openNew} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#2563eb,#1d4ed8)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+                <Plus size={15} /> Publier une offre
+              </button>
             </div>
-            <button onClick={openNew} className="btn--primary">
-              + Publier une offre
-            </button>
           </div>
+        </div>
 
+        <div style={{ maxWidth: 900, margin: "-32px auto 0", padding: "0 24px 60px" }}>
           {loading ? (
-            <div className="skeleton-list">
-              {Array(3).fill(0).map((_, i) => (
-                <div key={i} className="skeleton-item" style={{ height: 120 }} />
-              ))}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {Array(3).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 120, opacity: 0.5 }} />)}
             </div>
           ) : offres.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-state__icon">
-                <EmptyIcon />
-              </div>
-              <p>Aucune offre publiée pour le moment</p>
+            <div style={{ background: "#fff", borderRadius: 20, padding: "64px 24px", textAlign: "center" }}>
+              <Briefcase size={40} color="#e2e8f0" style={{ marginBottom: 12 }} />
+              <p style={{ color: "#94a3b8", fontSize: 15 }}>Aucune offre publiée pour le moment</p>
             </div>
           ) : (
-            <div className="card-list">
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {offres.map(offre => (
-                <div key={offre._id} className="card--offre">
-                  <div className="avatar--icon">
-                    <BriefcaseIcon />
+                <div key={offre._id} style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", borderLeft: "3px solid #2563eb" }}>
+                  <div style={{ width: 46, height: 46, borderRadius: 12, background: "rgba(37,99,235,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Briefcase size={20} color="#2563eb" />
                   </div>
-                  <div className="offre-content">
-                    <h3 className="offre-content__title">{offre.titre}</h3>
-                    <p className="offre-content__desc">{offre.description}</p>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
-                      {offre.domaine && (
-                        <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 20, padding: "2px 10px", fontSize: 11, fontWeight: 600 }}>
-                          {offre.domaine}
-                        </span>
-                      )}
-                      <p className="offre-content__date" style={{ margin: 0 }}>
-                        Publié le {new Date(offre.dateCreation || offre.createdAt).toLocaleDateString("fr-FR")}
-                      </p>
+                  <div style={{ flex: 1, minWidth: 150 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", margin: 0 }}>{offre.titre}</h3>
+                    <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{offre.description}</p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
+                      {offre.domaine && <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 20, padding: "2px 10px", fontSize: 11, fontWeight: 600 }}>{offre.domaine}</span>}
+                      <span style={{ fontSize: 12, color: "#94a3b8" }}>Publié le {new Date(offre.dateCreation || offre.createdAt).toLocaleDateString("fr-FR")}</span>
                     </div>
                   </div>
-                  <div className="action-group" style={{ flexShrink: 0 }}>
-                    <button onClick={() => openEdit(offre)} className="btn btn--edit">
-                      <EditIcon /> Modifier
+                  <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                    <button onClick={() => openEdit(offre)} style={{ padding: "8px 16px", borderRadius: 8, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontWeight: 600, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+                      <Edit2 size={13} /> Modifier
                     </button>
-                    <button onClick={() => setConfirmId(offre._id)} className="btn btn--delete">
-                      <TrashIcon />
+                    <button onClick={() => setConfirmId(offre._id)} style={{ width: 36, height: 36, borderRadius: 8, border: "none", background: "#fef2f2", color: "#ef4444", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 </div>
