@@ -67,6 +67,22 @@ function CandidatureCard({ c, onAction, actionId }) {
         <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
           <StatutIcon size={12} /> {statut.label}
         </span>
+        {c.scoreIA > 0 && (
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            background: c.scoreIA >= 70 ? "#ecfdf5" : c.scoreIA >= 40 ? "#fffbeb" : "#fef2f2",
+            border: `1.5px solid ${c.scoreIA >= 70 ? "#86efac" : c.scoreIA >= 40 ? "#fcd34d" : "#fca5a5"}`,
+            borderRadius: 10, padding: "4px 12px"
+          }}>
+            <span style={{ fontSize: 13 }}>🤖</span>
+            <div>
+              <p style={{ fontSize: 10, fontWeight: 700, color: "#94a3b8", margin: 0, textTransform: "uppercase" }}>Score IA</p>
+              <p style={{ fontSize: 14, fontWeight: 800, color: c.scoreIA >= 70 ? "#059669" : c.scoreIA >= 40 ? "#d97706" : "#ef4444", margin: 0 }}>
+                {c.scoreIA}/100
+              </p>
+            </div>
+          </div>
+        )}
         {c.statut === "EN_ATTENTE" && (
           <div style={{ display: "flex", gap: 8 }}>
             <button onClick={() => onAction(c._id, "accept")} disabled={accepting || refusing}
