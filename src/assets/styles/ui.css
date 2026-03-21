@@ -1,0 +1,210 @@
+/* ========================================
+   GLOBAL RESET & NORMALIZATION
+   ======================================== */
+
+/* Reset de tous les éléments */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Reset du HTML et du Body */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Root element */
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========================================
+   TYPOGRAPHIE
+   ======================================== */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* ========================================
+   FORMS & INPUTS
+   ======================================== */
+
+input,
+textarea,
+select,
+button {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* ========================================
+   IMAGES & MEDIA
+   ======================================== */
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+svg {
+  display: block;
+}
+
+/* ========================================
+   LISTES
+   ======================================== */
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   LIENS
+   ======================================== */
+
+a {
+  color: inherit;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   TITRES
+   ======================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  font-weight: inherit;
+}
+
+/* ========================================
+   PARAGRAPHES
+   ======================================== */
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   CONTENEURS
+   ======================================== */
+
+div,
+section,
+article,
+header,
+footer,
+main,
+nav {
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   SCROLLBAR STYLING (optionnel)
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ========================================
+   UTILITY CLASSES (optionnel)
+   ======================================== */
+
+.full-height {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.full-width {
+  width: 100%;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ========================================
+   RESPIRATION & SPACING DEFAULTS
+   ======================================== */
+
+/* Assurer que les conteneurs pleins écran n'ont pas de marges */
+[style*="minHeight: 100vh"],
+[style*="height: 100vh"],
+[style*="height: 100%"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
