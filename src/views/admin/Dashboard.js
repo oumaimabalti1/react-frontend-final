@@ -42,11 +42,11 @@ export default function Dashboard() {
   ];
 
   return (
-    <>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#f8fafc" }}>
       <Sidebar />
-      <div style={{ marginLeft: 240, minHeight: "100vh", background: "#f8fafc" }}>
+      <div style={{ flex: 1, minHeight: "100vh", background: "#f8fafc", display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <DNavbar />
-        <div style={{ padding: "40px 36px" }}>
+        <div style={{ flex: 1, padding: "40px 36px", overflowY: "auto" }}>
 
           <div style={{ marginBottom: 36 }}>
             <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Vue d'ensemble</h1>
@@ -79,6 +79,6 @@ export default function Dashboard() {
 
         </div>
       </div>
-    </>
+    </div>
   );
 }

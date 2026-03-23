@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL de base de ton backend
-const API_URL = process.env.REACT_APP_API_URL || 'https://backendtest-ugga.onrender.com';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Créer une instance axios
 const api = axios.create({
