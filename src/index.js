@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import "assets/styles/ui.css";
 
+
 import Auth from "layouts/Auth.js";
 import User from "layouts/User.js";
 import Landing from "views/Landing.js";

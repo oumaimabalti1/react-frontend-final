@@ -2,14 +2,12 @@
    GLOBAL RESET & NORMALIZATION
    ======================================== */
 
-/* Reset de tous les éléments */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Reset du HTML et du Body */
 html,
 body {
   margin: 0;
@@ -19,7 +17,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Root element */
 #root {
   margin: 0;
   padding: 0;
@@ -53,7 +50,6 @@ textarea,
 select,
 button {
   margin: 0;
-  padding: 0;
   font-family: inherit;
   font-size: inherit;
   color: inherit;
@@ -70,8 +66,6 @@ select:focus {
 button {
   cursor: pointer;
   border: none;
-  padding: 0;
-  margin: 0;
 }
 
 button:disabled {
@@ -123,12 +117,7 @@ a {
    TITRES
    ======================================== */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
   font-weight: inherit;
@@ -144,22 +133,20 @@ p {
 }
 
 /* ========================================
-   CONTENEURS
+   LAYOUT — Sidebar offset
    ======================================== */
 
-div,
-section,
-article,
-header,
-footer,
-main,
-nav {
-  margin: 0;
-  padding: 0;
+/* The sidebar is fixed at 240px wide.
+   All main page wrappers use class="page-content"
+   OR inline marginLeft: 240 — both work fine now. */
+.page-content {
+  margin-left: 240px;
+  min-height: 100vh;
+  background: #f8fafc;
 }
 
 /* ========================================
-   SCROLLBAR STYLING (optionnel)
+   SCROLLBAR STYLING
    ======================================== */
 
 ::-webkit-scrollbar {
@@ -181,7 +168,7 @@ nav {
 }
 
 /* ========================================
-   UTILITY CLASSES (optionnel)
+   UTILITY CLASSES
    ======================================== */
 
 .full-height {
@@ -191,20 +178,4 @@ nav {
 
 .full-width {
   width: 100%;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-/* ========================================
-   RESPIRATION & SPACING DEFAULTS
-   ======================================== */
-
-/* Assurer que les conteneurs pleins écran n'ont pas de marges */
-[style*="minHeight: 100vh"],
-[style*="height: 100vh"],
-[style*="height: 100%"] {
-  margin: 0 !important;
-  padding: 0 !important;
 }

@@ -31,7 +31,7 @@ export default function Offres() {
   useEffect(() => { fetchOffres(); }, []);
 
   const openEdit = (offre) => { setEditOffre(offre); setForm({ titre: offre.titre, description: offre.description, domaine: offre.domaine || "Autre" }); setShowForm(true); };
-  const openNew = () => { setEditOffre(null); setForm({ titre: "", description: "", domaine: "Autre" }); setAiPrompt(""); setShowForm(true); };
+  const openNew  = () => { setEditOffre(null); setForm({ titre: "", description: "", domaine: "Autre" }); setAiPrompt(""); setShowForm(true); };
 
   const generateWithAI = async () => {
     if (!aiPrompt.trim()) { showToast("Décrivez d'abord le poste", "error"); return; }
@@ -72,7 +72,7 @@ export default function Offres() {
   };
 
   const input = { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", boxSizing: "border-box", fontFamily: "inherit" };
-  const label = { fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
+  const labelStyle = { fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
 
   return (
     <>
@@ -106,8 +106,6 @@ export default function Offres() {
             <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1a2340", marginBottom: 20 }}>
               {editOffre ? "Modifier l'offre" : "Publier une offre"}
             </h2>
-
-            {/* AI Generator */}
             {!editOffre && (
               <div style={{ background: "linear-gradient(135deg,#eff6ff,#f0fdf4)", border: "1.5px solid #bfdbfe", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
@@ -122,15 +120,14 @@ export default function Offres() {
                 </div>
               </div>
             )}
-
             <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: 16 }}><label style={label}>Titre *</label><input value={form.titre} onChange={e => setForm({ ...form, titre: e.target.value })} required style={input} placeholder="Ex: Développeur Full Stack" /></div>
+              <div style={{ marginBottom: 16 }}><label style={labelStyle}>Titre *</label><input value={form.titre} onChange={e => setForm({ ...form, titre: e.target.value })} required style={input} placeholder="Ex: Développeur Full Stack" /></div>
               <div style={{ marginBottom: 16 }}>
-                <label style={label}>Description *</label>
+                <label style={labelStyle}>Description *</label>
                 <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required rows={5} style={{ ...input, resize: "vertical" }} placeholder="Décrivez le poste..." />
               </div>
               <div style={{ marginBottom: 20 }}>
-                <label style={label}>Domaine *</label>
+                <label style={labelStyle}>Domaine *</label>
                 <select value={form.domaine} onChange={e => setForm({ ...form, domaine: e.target.value })} required style={input}>
                   {["Informatique","Marketing","Finance","RH","Commercial","Juridique","Ingénierie","Design","Communication","Autre"].map(d => <option key={d} value={d}>{d}</option>)}
                 </select>
@@ -144,8 +141,9 @@ export default function Offres() {
       )}
 
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
+
         {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "64px 24px 80px", position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(37,99,235,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
           <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
             <span style={{ display: "inline-block", background: "rgba(37,99,235,0.15)", color: "#93c5fd", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
@@ -163,14 +161,15 @@ export default function Offres() {
           </div>
         </div>
 
-        <div style={{ maxWidth: 900, margin: "-32px auto 0", padding: "0 24px 60px" }}>
+        {/* Content */}
+        <div style={{ maxWidth: 900, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
           {loading ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {Array(3).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 120, opacity: 0.5 }} />)}
             </div>
           ) : offres.length === 0 ? (
             <div style={{ background: "#fff", borderRadius: 20, padding: "64px 24px", textAlign: "center" }}>
-              <Briefcase size={40} color="#e2e8f0" style={{ marginBottom: 12 }} />
+              <Briefcase size={40} color="#e2e8f0" style={{ margin: "0 auto 12px" }} />
               <p style={{ color: "#94a3b8", fontSize: 15 }}>Aucune offre publiée pour le moment</p>
             </div>
           ) : (

@@ -32,15 +32,15 @@ function StatCard({ label, value, color, bg, icon: Icon }) {
 function ConfirmModal({ onConfirm, onCancel, loading }) {
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.55)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div style={{ background: "#fff", borderRadius: 20, padding: "40px", maxWidth: 400, width: "100%", textAlign: "center", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+      <div style={{ background: "#fff", borderRadius: 20, padding: 40, maxWidth: 400, width: "100%", textAlign: "center", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
         <div style={{ width: 60, height: 60, borderRadius: "50%", background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
           <AlertTriangle size={28} color="#ef4444" />
         </div>
         <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a2340", marginBottom: 8 }}>Annuler ce congé ?</h3>
         <p style={{ color: "#6b7280", marginBottom: 32, lineHeight: 1.6 }}>Cette action est irréversible.</p>
         <div style={{ display: "flex", gap: 12 }}>
-          <button onClick={onCancel} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "2px solid #e5e7eb", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer", fontSize: 14 }}>Garder</button>
-          <button onClick={onConfirm} disabled={loading} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "#ef4444", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
+          <button onClick={onCancel} style={{ flex: 1, padding: 11, borderRadius: 10, border: "2px solid #e5e7eb", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer", fontSize: 14 }}>Garder</button>
+          <button onClick={onConfirm} disabled={loading} style={{ flex: 1, padding: 11, borderRadius: 10, border: "none", background: "#ef4444", color: "#fff", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
             {loading ? "Annulation..." : "Confirmer"}
           </button>
         </div>
@@ -75,7 +75,7 @@ function CongeCard({ c, onCancel }) {
   );
 }
 
-const inputStyle = { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", boxSizing: "border-box", transition: "border-color 0.2s" };
+const inputStyle = { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", boxSizing: "border-box" };
 const labelStyle = { fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
 
 export default function Conge() {
@@ -121,24 +121,34 @@ export default function Conge() {
       <Toast toast={toast} />
       {confirmId && <ConfirmModal onConfirm={() => handleCancel(confirmId)} onCancel={() => setConfirmId(null)} loading={!!cancelingId} />}
 
-      <main style={{ minHeight: "100vh", background: "#f1f5f9", paddingTop: 80 }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 60px" }}>
+      <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
-          {/* Header */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
-            <div>
-              <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Mes Congés</h1>
-              <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>{conges.length} demande{conges.length !== 1 ? "s" : ""} au total</p>
+        {/* Hero */}
+        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#2e1065 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(124,58,237,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
+          <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
+            <span style={{ display: "inline-block", background: "rgba(124,58,237,0.15)", color: "#a78bfa", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+              Portail Employé
+            </span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+              <div>
+                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Mes Congés</h1>
+                <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, margin: 0 }}>{conges.length} demande{conges.length !== 1 ? "s" : ""} au total</p>
+              </div>
+              <button onClick={() => { setShowForm(!showForm); setFormError(""); }}
+                style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "rgba(255,255,255,0.15)" : "linear-gradient(135deg,#7c3aed,#6d28d9)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+                {showForm ? <><X size={15} /> Annuler</> : <><Plus size={15} /> Nouvelle demande</>}
+              </button>
             </div>
-            <button onClick={() => { setShowForm(!showForm); setFormError(""); }}
-              style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "#e2e8f0" : "linear-gradient(135deg,#7c3aed,#6d28d9)", color: showForm ? "#374151" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: showForm ? "none" : "0 4px 14px rgba(124,58,237,0.3)" }}>
-              {showForm ? <><X size={15} /> Annuler</> : <><Plus size={15} /> Nouvelle demande</>}
-            </button>
           </div>
+        </div>
+
+        {/* Content */}
+        <div style={{ maxWidth: 900, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
 
           {/* Stats */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 32 }}>
-            <StatCard label="Total"      value={conges.length}                                    color="#7c3aed" bg="rgba(124,58,237,0.08)" icon={Calendar} />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 28 }}>
+            <StatCard label="Total"      value={conges.length}                                       color="#7c3aed" bg="rgba(124,58,237,0.08)" icon={Calendar} />
             <StatCard label="Approuvés"  value={conges.filter(c => c.statut === "APPROUVE").length}  color="#059669" bg="#ecfdf5"               icon={CheckCircle} />
             <StatCard label="En attente" value={conges.filter(c => c.statut === "EN_ATTENTE").length} color="#d97706" bg="#fffbeb"               icon={Clock} />
           </div>
@@ -166,7 +176,7 @@ export default function Conge() {
                   </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <button type="submit" disabled={formLoading} style={{ padding: "11px 28px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#059669,#047857)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: formLoading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: "0 4px 14px rgba(5,150,105,0.3)" }}>
+                  <button type="submit" disabled={formLoading} style={{ padding: "11px 28px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#059669,#047857)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: formLoading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 8 }}>
                     <CheckCircle size={15} /> {formLoading ? "Envoi..." : "Envoyer la demande"}
                   </button>
                 </div>
@@ -192,7 +202,6 @@ export default function Conge() {
               {conges.map(c => <CongeCard key={c._id} c={c} onCancel={setConfirmId} />)}
             </div>
           )}
-
         </div>
       </main>
     </>

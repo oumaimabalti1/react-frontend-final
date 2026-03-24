@@ -94,8 +94,8 @@ export default function MonCV() {
 
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
-        {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#164e63 60%,#1e293b 100%)", padding: "64px 24px 80px", position: "relative", overflow: "hidden" }}>
+        {/* Hero — paddingTop accounts for fixed navbar height */}
+        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#164e63 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(8,145,178,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
           <div style={{ maxWidth: 700, margin: "0 auto", position: "relative" }}>
             <span style={{ display: "inline-block", background: "rgba(8,145,178,0.15)", color: "#67e8f9", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
@@ -106,8 +106,8 @@ export default function MonCV() {
           </div>
         </div>
 
-        {/* Content */}
-        <div style={{ maxWidth: 700, margin: "-32px auto 0", padding: "0 24px 60px" }}>
+        {/* Cards lifted out of hero with negative margin — now fully visible */}
+        <div style={{ maxWidth: 700, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
           {!loading && cv && <CVCard cv={cv} onDelete={handleDelete} deleting={deleting} />}
           <DropZone onFile={handleUpload} uploading={uploading} hasCV={!!cv} fileRef={fileRef} />
           <input ref={fileRef} type="file" accept=".pdf" style={{ display: "none" }} onChange={e => handleUpload(e.target.files[0])} />

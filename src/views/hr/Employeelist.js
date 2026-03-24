@@ -41,7 +41,7 @@ export default function Employeelist() {
   };
 
   const input = { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", boxSizing: "border-box" };
-  const label = { fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
+  const labelStyle = { fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
 
   return (
     <>
@@ -50,7 +50,7 @@ export default function Employeelist() {
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
         {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "64px 24px 80px", position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(37,99,235,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
           <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
             <span style={{ display: "inline-block", background: "rgba(37,99,235,0.15)", color: "#93c5fd", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
@@ -69,7 +69,8 @@ export default function Employeelist() {
           </div>
         </div>
 
-        <div style={{ maxWidth: 900, margin: "-32px auto 0", padding: "0 24px 60px" }}>
+        {/* Content */}
+        <div style={{ maxWidth: 900, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
 
           {/* Form */}
           {showForm && (
@@ -84,11 +85,11 @@ export default function Employeelist() {
               )}
               <form onSubmit={handleCreate}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16, marginBottom: 20 }}>
-                  <div><label style={label}>Nom complet *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required style={input} placeholder="Jean Dupont" /></div>
-                  <div><label style={label}>Email *</label><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required style={input} placeholder="jean@exemple.com" /></div>
-                  <div><label style={label}>Mot de passe *</label><input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required style={input} placeholder="••••••••" /></div>
+                  <div><label style={labelStyle}>Nom complet *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required style={input} placeholder="Jean Dupont" /></div>
+                  <div><label style={labelStyle}>Email *</label><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required style={input} placeholder="jean@exemple.com" /></div>
+                  <div><label style={labelStyle}>Mot de passe *</label><input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required style={input} placeholder="••••••••" /></div>
                   <div>
-                    <label style={label}>Département *</label>
+                    <label style={labelStyle}>Département *</label>
                     <select value={form.departement} onChange={e => setForm({ ...form, departement: e.target.value })} required style={input}>
                       <option value="">Sélectionner...</option>
                       {depts.map(d => <option key={d} value={d}>{d}</option>)}
@@ -116,7 +117,7 @@ export default function Employeelist() {
               <div style={{ padding: 40, textAlign: "center", color: "#94a3b8" }}>Chargement...</div>
             ) : employees.length === 0 ? (
               <div style={{ padding: 60, textAlign: "center", color: "#94a3b8" }}>
-                <Users size={40} color="#e2e8f0" style={{ marginBottom: 12 }} />
+                <Users size={40} color="#e2e8f0" style={{ margin: "0 auto 12px" }} />
                 <p style={{ margin: 0 }}>Aucun employé</p>
               </div>
             ) : (
@@ -152,4 +153,5 @@ export default function Employeelist() {
         </div>
       </main>
     </>
-  );}
+  );
+}

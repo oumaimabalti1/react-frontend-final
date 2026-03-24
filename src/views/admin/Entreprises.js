@@ -101,13 +101,15 @@ export default function Entreprises() {
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
-    <>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#f8fafc" }}>
       <Sidebar />
       <Toast toast={toast} />
       {confirmId && <ConfirmModal onConfirm={() => handleDelete(confirmId)} onCancel={() => setConfirmId(null)} loading={!!deletingId} />}
 
-      <div style={{ marginLeft: 240, minHeight: "100vh", background: "#f8fafc" }}>
+      {/* Main content — offset by sidebar width */}
+      <div style={{ marginLeft: 240, flex: 1, minHeight: "100vh", background: "#f8fafc" }}>
         <DNavbar />
+
         <div style={{ padding: "40px 36px" }}>
 
           {/* Header */}
@@ -213,6 +215,6 @@ export default function Entreprises() {
 
         </div>
       </div>
-    </>
+    </div>
   );
 }

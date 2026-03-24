@@ -44,9 +44,12 @@ export default function Dashboard() {
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "#f8fafc" }}>
       <Sidebar />
-      <div style={{ flex: 1, minHeight: "100vh", background: "#f8fafc", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+
+      {/* Main content — offset by sidebar width */}
+      <div style={{ marginLeft: 240, flex: 1, minHeight: "100vh", background: "#f8fafc" }}>
         <DNavbar />
-        <div style={{ flex: 1, padding: "40px 36px", overflowY: "auto" }}>
+
+        <div style={{ padding: "40px 36px" }}>
 
           <div style={{ marginBottom: 36 }}>
             <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Vue d'ensemble</h1>
@@ -61,7 +64,9 @@ export default function Dashboard() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
             {loading
-              ? Array(5).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 110, opacity: 0.4 }} />)
+              ? Array(5).fill(0).map((_, i) => (
+                  <div key={i} style={{ background: "#fff", borderRadius: 16, height: 110, opacity: 0.4 }} />
+                ))
               : cards.map((c, i) => <StatCard key={i} {...c} />)
             }
           </div>
@@ -70,9 +75,9 @@ export default function Dashboard() {
             <div style={{ marginTop: 40, background: "#fff", borderRadius: 16, padding: "28px 32px", boxShadow: "0 2px 16px rgba(30,60,120,0.07)" }}>
               <h2 style={{ fontSize: 16, fontWeight: 700, color: "#1a2340", marginBottom: 20 }}>Répartition des utilisateurs</h2>
               <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
-                <ProgressBar label="RH"        value={stats.rh}       total={stats.totalUsers} color="#0891b2" />
-                <ProgressBar label="Employés"  value={stats.employees} total={stats.totalUsers} color="#059669" />
-                <ProgressBar label="Candidats" value={stats.candidats} total={stats.totalUsers} color="#d97706" />
+                <ProgressBar label="RH"        value={stats.rh}        total={stats.totalUsers} color="#0891b2" />
+                <ProgressBar label="Employés"  value={stats.employees}  total={stats.totalUsers} color="#059669" />
+                <ProgressBar label="Candidats" value={stats.candidats}  total={stats.totalUsers} color="#d97706" />
               </div>
             </div>
           )}

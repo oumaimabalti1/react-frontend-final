@@ -32,7 +32,6 @@ function PlainteCard({ p, expanded, onToggle }) {
   const statut = statutConfig[p.statut] || { label: p.statut, color: "#6b7280", bg: "#f1f5f9" };
   return (
     <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", borderLeft: `3px solid ${statut.color}` }}>
-      {/* Row */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 24px", flexWrap: "wrap" }}>
         <div style={{ width: 44, height: 44, borderRadius: 12, background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <Megaphone size={20} color="#ef4444" />
@@ -46,15 +45,12 @@ function PlainteCard({ p, expanded, onToggle }) {
           {expanded ? <><ChevronUp size={14} /> Masquer</> : <><ChevronDown size={14} /> Voir</>}
         </button>
       </div>
-
-      {/* Expanded */}
       {expanded && (
         <div style={{ borderTop: "1px solid #f1f5f9", padding: "20px 24px", background: "#fafbfc", display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ background: "#fff", borderRadius: 12, padding: "14px 16px", border: "1px solid #e8edf5" }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Votre message</p>
             <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.7, margin: 0 }}>{p.message}</p>
           </div>
-
           {p.reponse ? (
             <div style={{ background: "#ecfdf5", borderRadius: 12, padding: "14px 16px", border: "1px solid #86efac", display: "flex", gap: 10 }}>
               <CheckCircle size={16} color="#059669" style={{ flexShrink: 0, marginTop: 2 }} />
@@ -113,24 +109,34 @@ export default function PlaintesEmployee() {
       <ENavbar />
       <Toast toast={toast} />
 
-      <main style={{ minHeight: "100vh", background: "#f1f5f9", paddingTop: 80 }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 60px" }}>
+      <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
-          {/* Header */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
-            <div>
-              <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Mes Plaintes</h1>
-              <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>Signalez un problème à votre RH</p>
+        {/* Hero */}
+        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#2e1065 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(124,58,237,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
+          <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
+            <span style={{ display: "inline-block", background: "rgba(239,68,68,0.15)", color: "#fca5a5", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+              Portail Employé
+            </span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+              <div>
+                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Mes Plaintes</h1>
+                <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, margin: 0 }}>Signalez un problème à votre RH</p>
+              </div>
+              <button onClick={() => { setShowForm(!showForm); setFormError(""); }}
+                style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "rgba(255,255,255,0.15)" : "linear-gradient(135deg,#ef4444,#dc2626)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+                {showForm ? <><X size={15} /> Annuler</> : <><Plus size={15} /> Nouvelle plainte</>}
+              </button>
             </div>
-            <button onClick={() => { setShowForm(!showForm); setFormError(""); }}
-              style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "#e2e8f0" : "linear-gradient(135deg,#ef4444,#dc2626)", color: showForm ? "#374151" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: showForm ? "none" : "0 4px 14px rgba(239,68,68,0.3)" }}>
-              {showForm ? <><X size={15} /> Annuler</> : <><Plus size={15} /> Nouvelle plainte</>}
-            </button>
           </div>
+        </div>
+
+        {/* Content */}
+        <div style={{ maxWidth: 900, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
 
           {/* Stats */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 32 }}>
-            <StatCard label="Total"      value={plaintes.length}                                    color="#7c3aed" bg="rgba(124,58,237,0.08)" icon={Megaphone} />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 28 }}>
+            <StatCard label="Total"      value={plaintes.length}                                       color="#7c3aed" bg="rgba(124,58,237,0.08)" icon={Megaphone} />
             <StatCard label="En attente" value={plaintes.filter(p => p.statut === "EN_ATTENTE").length} color="#d97706" bg="#fffbeb"               icon={Clock} />
             <StatCard label="Traitées"   value={plaintes.filter(p => p.statut === "TRAITEE").length}    color="#059669" bg="#ecfdf5"               icon={CheckCircle} />
           </div>
@@ -156,7 +162,7 @@ export default function PlaintesEmployee() {
                   <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} required rows={4} style={{ ...inputStyle, resize: "vertical" }} placeholder="Décrivez votre problème en détail..." />
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <button type="submit" disabled={formLoading} style={{ padding: "11px 28px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#ef4444,#dc2626)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: formLoading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: "0 4px 14px rgba(239,68,68,0.3)" }}>
+                  <button type="submit" disabled={formLoading} style={{ padding: "11px 28px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#ef4444,#dc2626)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: formLoading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 8 }}>
                     <Send size={15} /> {formLoading ? "Envoi..." : "Envoyer la plainte"}
                   </button>
                 </div>
@@ -184,7 +190,6 @@ export default function PlaintesEmployee() {
               ))}
             </div>
           )}
-
         </div>
       </main>
     </>

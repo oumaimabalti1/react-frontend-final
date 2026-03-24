@@ -50,7 +50,7 @@ export default function Conges() {
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
         {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "64px 24px 80px", position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(37,99,235,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
           <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
             <span style={{ display: "inline-block", background: "rgba(217,119,6,0.2)", color: "#fcd34d", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
@@ -61,15 +61,16 @@ export default function Conges() {
           </div>
         </div>
 
-        <div style={{ maxWidth: 900, margin: "-32px auto 0", padding: "0 24px 60px" }}>
+        {/* Content */}
+        <div style={{ maxWidth: 900, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
 
           {/* Stats */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14, marginBottom: 24 }}>
             {[
-              { label: "Total", value: conges.length, color: "#2563eb", bg: "#eff6ff", icon: Calendar },
+              { label: "Total",      value: conges.length,                                       color: "#2563eb", bg: "#eff6ff", icon: Calendar },
               { label: "En attente", value: conges.filter(c => c.statut === "EN_ATTENTE").length, color: "#d97706", bg: "#fffbeb", icon: Clock },
-              { label: "Approuvés", value: conges.filter(c => c.statut === "APPROUVE").length, color: "#059669", bg: "#ecfdf5", icon: CheckCircle },
-              { label: "Refusés", value: conges.filter(c => c.statut === "REFUSE").length, color: "#ef4444", bg: "#fef2f2", icon: XCircle },
+              { label: "Approuvés",  value: conges.filter(c => c.statut === "APPROUVE").length,   color: "#059669", bg: "#ecfdf5", icon: CheckCircle },
+              { label: "Refusés",    value: conges.filter(c => c.statut === "REFUSE").length,     color: "#ef4444", bg: "#fef2f2", icon: XCircle },
             ].map(s => (
               <div key={s.label} style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", borderTop: `3px solid ${s.color}`, display: "flex", alignItems: "center", gap: 14 }}>
                 <div style={{ width: 42, height: 42, borderRadius: 12, background: s.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -99,7 +100,7 @@ export default function Conges() {
             </div>
           ) : filtered.length === 0 ? (
             <div style={{ background: "#fff", borderRadius: 20, padding: "60px 24px", textAlign: "center" }}>
-              <Calendar size={40} color="#e2e8f0" style={{ marginBottom: 12 }} />
+              <Calendar size={40} color="#e2e8f0" style={{ margin: "0 auto 12px" }} />
               <p style={{ color: "#94a3b8" }}>Aucune demande de congé</p>
             </div>
           ) : (
