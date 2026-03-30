@@ -117,7 +117,7 @@ export default function Applications() {
                 {candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""}
               </p>
             </div>
-            <Link to="/candidat/offres" style={{
+            <Link to="/candidat/offre" style={{
               padding: "10px 20px", borderRadius: 10,
               background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
               color: "#fff", fontWeight: 600, fontSize: 14, textDecoration: "none",

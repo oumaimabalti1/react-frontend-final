@@ -85,8 +85,8 @@ export default function Employeelist() {
               )}
               <form onSubmit={handleCreate}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16, marginBottom: 20 }}>
-                  <div><label style={labelStyle}>Nom complet *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required style={input} placeholder="Jean Dupont" /></div>
-                  <div><label style={labelStyle}>Email *</label><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required style={input} placeholder="jean@exemple.com" /></div>
+                  <div><label style={labelStyle}>Nom complet *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required style={input} placeholder="vous" /></div>
+                  <div><label style={labelStyle}>Email *</label><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required style={input} placeholder="vous@exemple.com" /></div>
                   <div><label style={labelStyle}>Mot de passe *</label><input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required style={input} placeholder="••••••••" /></div>
                   <div>
                     <label style={labelStyle}>Département *</label>
