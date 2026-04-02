@@ -106,20 +106,7 @@ export default function Offres() {
             <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1a2340", marginBottom: 20 }}>
               {editOffre ? "Modifier l'offre" : "Publier une offre"}
             </h2>
-            {!editOffre && (
-              <div style={{ background: "linear-gradient(135deg,#eff6ff,#f0fdf4)", border: "1.5px solid #bfdbfe", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                  <span style={{ fontSize: 18 }}>✨</span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "#1e3a5f" }}>Générer avec l'IA</span>
-                </div>
-                <div style={{ display: "flex", gap: 10 }}>
-                  <input type="text" value={aiPrompt} onChange={e => setAiPrompt(e.target.value)} onKeyDown={e => e.key === "Enter" && (e.preventDefault(), generateWithAI())} placeholder="Ex: Développeur React senior..." style={{ ...input, flex: 1 }} />
-                  <button type="button" onClick={generateWithAI} disabled={aiLoading} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: aiLoading ? "#e2e8f0" : "linear-gradient(135deg,#2563eb,#1d4ed8)", color: aiLoading ? "#94a3b8" : "#fff", fontWeight: 700, fontSize: 13, cursor: aiLoading ? "not-allowed" : "pointer", whiteSpace: "nowrap" }}>
-                    {aiLoading ? "⏳..." : "✨ Générer"}
-                  </button>
-                </div>
-              </div>
-            )}
+           
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: 16 }}><label style={labelStyle}>Titre *</label><input value={form.titre} onChange={e => setForm({ ...form, titre: e.target.value })} required style={input} placeholder="Ex: Développeur Full Stack" /></div>
               <div style={{ marginBottom: 16 }}>
