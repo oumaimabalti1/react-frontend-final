@@ -49,6 +49,7 @@ export default function Offres() {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setFormLoading(true);
+     console.log("FORM DATA:", form); 
     try {
       if (editOffre) { await api.put(`/rh/offres/${editOffre._id}`, form); showToast("Offre mise à jour"); }
       else { await api.post("/rh/offres", form); showToast("Offre publiée avec succès"); }
@@ -105,10 +106,10 @@ export default function Offres() {
   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
     <label style={{ ...labelStyle, marginBottom: 0 }}>Description *</label>
     <button type="button" onClick={generateWithAI} disabled={aiLoading || !form.titre.trim()} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: aiLoading ? "#94a3b8" : "linear-gradient(135deg,#8b5cf6,#6d28d9)", color: "#fff", fontSize: 12, fontWeight: 700, cursor: aiLoading || !form.titre.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 6 }}>
-      {aiLoading ? "Génération..." : "✨ Générer avec IA"}
+      {aiLoading ? "Génération..." : " Générer "}
     </button>
   </div>
-  <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required rows={5} style={{ ...input, resize: "vertical" }} placeholder="Décrivez le poste ou cliquez sur 'Générer avec IA'..." />
+  <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required rows={5} style={{ ...input, resize: "vertical" }} placeholder="Décrivez le poste ou cliquez sur 'Générer'..." />
 </div>
               
               <div style={{ marginBottom: 20 }}>
