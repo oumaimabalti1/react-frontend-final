@@ -33,24 +33,16 @@ export default function Offres() {
   const openEdit = (offre) => { setEditOffre(offre); setForm({ titre: offre.titre, description: offre.description, domaine: offre.domaine || "Autre" }); setShowForm(true); };
   const openNew  = () => { setEditOffre(null); setForm({ titre: "", description: "", domaine: "Autre" }); setAiPrompt(""); setShowForm(true); };
 
-  const generateWithAI = async () => {
-    if (!aiPrompt.trim()) { showToast("Décrivez d'abord le poste", "error"); return; }
+ const generateWithAI = async () => {
+    if (!form.titre.trim()) { showToast("Entrez d'abord un titre", "error"); return; }
     setAiLoading(true);
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514", max_tokens: 1000,
-          system: "Tu es un expert RH. Génère une offre d'emploi professionnelle en français. Réponds UNIQUEMENT en JSON valide avec exactement deux champs: {\"titre\": \"...\", \"description\": \"...\"}. Le titre doit être concis (max 8 mots). La description doit être détaillée (150-200 mots).",
-          messages: [{ role: "user", content: `Génère une offre d'emploi pour ce poste : ${aiPrompt}` }]
-        })
+      const res = await api.post('/rh/offres/generate-description', {
+        titre: form.titre,
+        domaine: form.domaine
       });
-      const data = await response.json();
-      const text = data.content?.[0]?.text || "";
-      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-      setForm(f => ({ ...f, titre: parsed.titre || f.titre, description: parsed.description || f.description }));
-      showToast("Offre générée avec succès !");
+      setForm(f => ({ ...f, description: res.data.description }));
+      showToast("Description générée avec succès !");
     } catch { showToast("Erreur génération IA", "error"); }
     finally { setAiLoading(false); }
   };
@@ -109,10 +101,16 @@ export default function Offres() {
            
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: 16 }}><label style={labelStyle}>Titre *</label><input value={form.titre} onChange={e => setForm({ ...form, titre: e.target.value })} required style={input} placeholder="Ex: Développeur Full Stack" /></div>
-              <div style={{ marginBottom: 16 }}>
-                <label style={labelStyle}>Description *</label>
-                <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required rows={5} style={{ ...input, resize: "vertical" }} placeholder="Décrivez le poste..." />
-              </div>
+<div style={{ marginBottom: 16 }}>
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+    <label style={{ ...labelStyle, marginBottom: 0 }}>Description *</label>
+    <button type="button" onClick={generateWithAI} disabled={aiLoading || !form.titre.trim()} style={{ padding: "6px 14px", borderRadius: 8, border: "none", background: aiLoading ? "#94a3b8" : "linear-gradient(135deg,#8b5cf6,#6d28d9)", color: "#fff", fontSize: 12, fontWeight: 700, cursor: aiLoading || !form.titre.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+      {aiLoading ? "Génération..." : "✨ Générer avec IA"}
+    </button>
+  </div>
+  <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required rows={5} style={{ ...input, resize: "vertical" }} placeholder="Décrivez le poste ou cliquez sur 'Générer avec IA'..." />
+</div>
+              
               <div style={{ marginBottom: 20 }}>
                 <label style={labelStyle}>Domaine *</label>
                 <select value={form.domaine} onChange={e => setForm({ ...form, domaine: e.target.value })} required style={input}>
