@@ -56,6 +56,14 @@ function CandidatureCard({ c, onAction, actionId }) {
           <p style={{ fontSize: 12, color: "#64748b", marginTop: 2, display: "flex", alignItems: "center", gap: 4 }}>
             <Briefcase size={11} /> {c.offreId?.titre || "—"}
           </p>
+          {c.scoreIA > 0 && (
+  <div style={{ display: "inline-flex", alignItems: "center", gap: 5, marginTop: 4, padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700,
+    background: c.scoreIA >= 70 ? "#ecfdf5" : c.scoreIA >= 40 ? "#fffbeb" : "#fef2f2",
+    color: c.scoreIA >= 70 ? "#059669" : c.scoreIA >= 40 ? "#d97706" : "#ef4444"
+  }}>
+    Score : {c.scoreIA}%
+  </div>
+)}
         </div>
         <p style={{ fontSize: 12, color: "#94a3b8", whiteSpace: "nowrap" }}>
           {new Date(c.createdAt).toLocaleDateString("fr-FR")}
