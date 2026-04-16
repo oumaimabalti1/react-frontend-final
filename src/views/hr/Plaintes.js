@@ -24,7 +24,7 @@ function ReplyModal({ plainte, onClose, onSent }) {
     if (!reponse.trim()) return;
     setLoading(true);
     try {
-      await api.put(`/rh/plaintes/${plainte._id}`, { reponse });
+await api.put(`/rh/plaintes/${plainte._id}/reply`, { reponse });
       onSent();
     } catch (err) { showToast(err.response?.data?.message || "Erreur", "error"); }
     finally { setLoading(false); }
