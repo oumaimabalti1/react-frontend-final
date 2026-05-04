@@ -144,8 +144,8 @@ export default function Entreprises() {
                 <FormField label="Secteur" name="secteur" value={form.secteur} onChange={onChange} placeholder="Ex: Informatique" />
 
                 <SectionLabel color="#059669">Compte Responsable RH</SectionLabel>
-                <FormField label="Nom du RH" name="nomRH" value={form.nomRH} onChange={onChange} placeholder="Ex: Marie Dupont" />
-                <FormField label="Email du RH" name="emailRH" type="email" value={form.emailRH} onChange={onChange} placeholder="marie@techcorp.com" />
+                <FormField label="Nom du RH" name="nomRH" value={form.nomRH} onChange={onChange} placeholder="rh name" />
+                <FormField label="Email du RH" name="emailRH" type="email" value={form.emailRH} onChange={onChange} placeholder="rh@company.com" />
                 <FormField label="Mot de passe RH" name="passwordRH" type="password" value={form.passwordRH} onChange={onChange} placeholder="••••••••" />
               </div>
 

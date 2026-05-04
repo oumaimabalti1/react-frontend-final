@@ -3,6 +3,7 @@ import { Link, useLocation, useHistory } from "react-router-dom";
 import { Home, Briefcase, ClipboardList, FileText, LogOut, Menu, X } from "lucide-react";
 import { logout } from "services/authService";
 import logo from "assets/img/EASYRH.png";
+import ChatbotWidget from "components/ChatbotWidget";
 
 const ACCENT = "#8b5cf6";
 const links = [
@@ -56,6 +57,10 @@ export default function CNavbar() {
         </div>
       )}
       <div style={{ height:64 }} />
+     
+      <ChatbotWidget />
     </>
   );
 }
+  
+  
