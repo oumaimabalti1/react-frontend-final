@@ -29,62 +29,65 @@ export default function ContactUs() {
     }
   };
 
+  const inputStyle = {
+    width: "100%", padding: "12px 14px 12px 42px", borderRadius: 12,
+    border: "1.5px solid #e2e8f0", background: "#fafafa", color: "#0f172a",
+    fontSize: 14, outline: "none", boxSizing: "border-box",
+    transition: "border-color 0.15s"
+  };
+
   return (
     <>
       <FreeNavbar />
-      <main style={{ minHeight: "100vh", background: "#0f172a" }}>
+      <main style={{ minHeight: "100vh", background: "#ffffff" }}>
 
-        {/* Hero */}
-        <div style={{
-          background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)",
-          padding: "80px 24px 60px", position: "relative", overflow: "hidden"
-        }}>
-          <div style={{ position: "absolute", top: -100, right: -100, width: 400, height: 400, borderRadius: "50%", background: "rgba(59,130,246,0.07)", filter: "blur(80px)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: -60, left: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(139,92,246,0.06)", filter: "blur(70px)", pointerEvents: "none" }} />
-          <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center", position: "relative" }}>
-            <span style={{
-              display: "inline-block", background: "rgba(59,130,246,0.12)", color: "#60a5fa",
-              border: "1px solid rgba(59,130,246,0.2)", borderRadius: 20, padding: "5px 16px",
-              fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20
-            }}>Contact</span>
-            <h1 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 900, color: "#fff", margin: "0 0 16px", letterSpacing: "-0.02em" }}>
-              Contactez-<span style={{ background: "linear-gradient(135deg,#3b82f6,#8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>nous</span>
-            </h1>
-            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: 1.7, margin: 0 }}>
-              Une question, une suggestion ? Notre équipe vous répond dans les plus brefs délais.
-            </p>
-          </div>
+        {/* Hero — left aligned */}
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 32px 0" }}>
+          <span style={{
+            display: "inline-block", background: "#f0fdfa", color: "#0891b2",
+            border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px",
+            fontSize: 12, fontWeight: 700, letterSpacing: "0.08em",
+            textTransform: "uppercase", marginBottom: 16
+          }}>
+            Contact
+          </span>
+          <h1 style={{ fontSize: 48, fontWeight: 900, color: "#0f172a", margin: "0 0 16px", lineHeight: 1.1 }}>
+            Contactez-<span style={{ color: "#0891b2" }}>nous</span>
+          </h1>
+          <p style={{ fontSize: 17, color: "#64748b", maxWidth: 500, lineHeight: 1.7, margin: 0 }}>
+            Une question, une suggestion ? Notre équipe vous répond dans les plus brefs délais.
+          </p>
         </div>
 
         {/* Content */}
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "60px 24px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 40, alignItems: "start" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 32px 80px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr", gap: 40, alignItems: "start" }}>
 
             {/* Left — infos */}
             <div>
-              <h2 style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 8 }}>Informations</h2>
-              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 32, lineHeight: 1.6 }}>
-                Nous sommes disponibles pour répondre à toutes vos questions.
-              </p>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#0f172a", marginBottom: 24 }}>Informations</h2>
 
               {[
-                { icon: Mail,    label: "Email",    value: "baltioumaima1@gmail.com" },
-                { icon: Phone,   label: "Téléphone", value: "+216 00 000 000" },
-                { icon: MapPin,  label: "Adresse",  value: "Tunis, Tunisie" },
-                { icon: Clock,   label: "Horaires", value: "Lun–Ven, 9h–18h" },
+                { icon: Mail,   label: "Email",     value: "baltioumaima1@gmail.com" },
+                { icon: Phone,  label: "Téléphone", value: "+216 00 000 000" },
+                { icon: MapPin, label: "Adresse",   value: "Tunis, Tunisie" },
+                { icon: Clock,  label: "Horaires",  value: "Lun–Ven, 9h–18h" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} style={{
-                  display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 24,
+                  display: "flex", alignItems: "center", gap: 14, marginBottom: 16,
                   padding: "16px 20px", borderRadius: 14,
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.07)"
+                  background: "#fafafa", border: "1px solid #f1f5f9"
                 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(59,130,246,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <Icon size={16} color="#60a5fa" />
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 10,
+                    background: "#f0fdfa", display: "flex",
+                    alignItems: "center", justifyContent: "center", flexShrink: 0
+                  }}>
+                    <Icon size={16} color="#0891b2" />
                   </div>
                   <div>
-                    <p style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 4px" }}>{label}</p>
-                    <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", margin: 0, fontWeight: 500 }}>{value}</p>
+                    <p style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 2px" }}>{label}</p>
+                    <p style={{ fontSize: 14, color: "#334155", margin: 0, fontWeight: 500 }}>{value}</p>
                   </div>
                 </div>
               ))}
@@ -92,102 +95,87 @@ export default function ContactUs() {
 
             {/* Right — form */}
             <div style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1.5px solid rgba(255,255,255,0.08)",
-              borderRadius: 24, padding: "40px 36px",
-              backdropFilter: "blur(12px)"
+              background: "#fafafa", border: "1px solid #e2e8f0",
+              borderRadius: 20, padding: "36px 32px"
             }}>
               {sent ? (
                 <div style={{ textAlign: "center", padding: "40px 0" }}>
-                  <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(16,185,129,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-                    <CheckCircle size={36} color="#10b981" />
+                  <div style={{
+                    width: 72, height: 72, borderRadius: "50%",
+                    background: "#f0fdf4", display: "flex",
+                    alignItems: "center", justifyContent: "center", margin: "0 auto 20px"
+                  }}>
+                    <CheckCircle size={36} color="#059669" />
                   </div>
-                  <h3 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 8 }}>Message envoyé !</h3>
-                  <p style={{ color: "rgba(255,255,255,0.45)", marginBottom: 28 }}>Nous vous répondrons dans les plus brefs délais.</p>
+                  <h3 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>Message envoyé !</h3>
+                  <p style={{ color: "#64748b", marginBottom: 28 }}>Nous vous répondrons dans les plus brefs délais.</p>
                   <button onClick={() => setSent(false)} style={{
-                    padding: "11px 28px", borderRadius: 12, border: "1.5px solid rgba(255,255,255,0.15)",
-                    background: "rgba(255,255,255,0.07)", color: "#fff", fontWeight: 600, cursor: "pointer", fontSize: 14
+                    padding: "11px 28px", borderRadius: 12, border: "1.5px solid #e2e8f0",
+                    background: "white", color: "#475569", fontWeight: 600, cursor: "pointer", fontSize: 14
                   }}>Envoyer un autre message</button>
                 </div>
               ) : (
                 <>
-                  <h2 style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 28 }}>Envoyer un message</h2>
+                  <h2 style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", marginBottom: 28 }}>Envoyer un message</h2>
                   <form ref={formRef} onSubmit={handleSubmit}>
 
-                    {/* Nom */}
                     <div style={{ marginBottom: 18 }}>
-                      <label style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", display: "block", marginBottom: 8 }}>Nom complet *</label>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#64748b", display: "block", marginBottom: 8 }}>Nom complet *</label>
                       <div style={{ position: "relative" }}>
-                        <User size={15} color="rgba(255,255,255,0.3)" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
+                        <User size={15} color="#94a3b8" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
                         <input
-                          name="name"
-                          value={form.name}
+                          name="name" value={form.name}
                           onChange={e => setForm({ ...form, name: e.target.value })}
-                          required
-                          placeholder="Votre nom"
-                          style={{
-                            width: "100%", padding: "12px 14px 12px 40px", borderRadius: 12,
-                            border: "1.5px solid rgba(255,255,255,0.1)",
-                            background: "rgba(255,255,255,0.06)", color: "#fff",
-                            fontSize: 14, outline: "none", boxSizing: "border-box"
-                          }}
+                          required placeholder="Votre nom"
+                          style={inputStyle}
+                          onFocus={e => e.target.style.borderColor = "#0891b2"}
+                          onBlur={e => e.target.style.borderColor = "#e2e8f0"}
                         />
                       </div>
                     </div>
 
-                    {/* Email */}
                     <div style={{ marginBottom: 18 }}>
-                      <label style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", display: "block", marginBottom: 8 }}>Email *</label>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#64748b", display: "block", marginBottom: 8 }}>Email *</label>
                       <div style={{ position: "relative" }}>
-                        <Mail size={15} color="rgba(255,255,255,0.3)" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
+                        <Mail size={15} color="#94a3b8" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
                         <input
-                          name="email"
-                          type="email"
-                          value={form.email}
+                          name="email" type="email" value={form.email}
                           onChange={e => setForm({ ...form, email: e.target.value })}
-                          required
-                          placeholder="votre@email.com"
-                          style={{
-                            width: "100%", padding: "12px 14px 12px 40px", borderRadius: 12,
-                            border: "1.5px solid rgba(255,255,255,0.1)",
-                            background: "rgba(255,255,255,0.06)", color: "#fff",
-                            fontSize: 14, outline: "none", boxSizing: "border-box"
-                          }}
+                          required placeholder="votre@email.com"
+                          style={inputStyle}
+                          onFocus={e => e.target.style.borderColor = "#0891b2"}
+                          onBlur={e => e.target.style.borderColor = "#e2e8f0"}
                         />
                       </div>
                     </div>
 
-                    {/* Message */}
                     <div style={{ marginBottom: 24 }}>
-                      <label style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", display: "block", marginBottom: 8 }}>Message *</label>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#64748b", display: "block", marginBottom: 8 }}>Message *</label>
                       <div style={{ position: "relative" }}>
-                        <MessageSquare size={15} color="rgba(255,255,255,0.3)" style={{ position: "absolute", left: 14, top: 14 }} />
+                        <MessageSquare size={15} color="#94a3b8" style={{ position: "absolute", left: 14, top: 14 }} />
                         <textarea
-                          name="message"
-                          value={form.message}
+                          name="message" value={form.message}
                           onChange={e => setForm({ ...form, message: e.target.value })}
-                          required
-                          rows={5}
-                          placeholder="Décrivez votre demande..."
+                          required rows={5} placeholder="Décrivez votre demande..."
                           style={{
-                            width: "100%", padding: "12px 14px 12px 40px", borderRadius: 12,
-                            border: "1.5px solid rgba(255,255,255,0.1)",
-                            background: "rgba(255,255,255,0.06)", color: "#fff",
-                            fontSize: 14, outline: "none", resize: "vertical", boxSizing: "border-box",
-                            fontFamily: "inherit"
+                            ...inputStyle, padding: "12px 14px 12px 42px",
+                            resize: "vertical", fontFamily: "inherit"
                           }}
+                          onFocus={e => e.target.style.borderColor = "#0891b2"}
+                          onBlur={e => e.target.style.borderColor = "#e2e8f0"}
                         />
                       </div>
                     </div>
 
-                    {error && <p style={{ color: "#f87171", fontSize: 13, marginBottom: 16 }}>{error}</p>}
+                    {error && <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 16 }}>{error}</p>}
 
                     <button type="submit" disabled={loading} style={{
                       width: "100%", padding: "14px", borderRadius: 12, border: "none",
-                      background: loading ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg,#2563eb,#7c3aed)",
-                      color: "#fff", fontWeight: 700, fontSize: 15, cursor: loading ? "not-allowed" : "pointer",
+                      background: loading ? "#e2e8f0" : "#0891b2",
+                      color: loading ? "#94a3b8" : "#fff", fontWeight: 700, fontSize: 15,
+                      cursor: loading ? "not-allowed" : "pointer",
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                      boxShadow: loading ? "none" : "0 4px 20px rgba(37,99,235,0.4)",
+                      boxShadow: loading ? "none" : "0 4px 16px rgba(8,145,178,0.3)",
                       transition: "all 0.2s"
                     }}>
                       <Send size={16} />

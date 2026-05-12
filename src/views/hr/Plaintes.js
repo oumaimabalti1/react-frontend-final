@@ -4,7 +4,7 @@ import HNavbar from "components/Navbars/HNavbar.js";
 import api from "services/api";
 
 const Toast = ({ toast }) => !toast ? null : (
-  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#ef4444" : "#10b981", color: "#fff", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
+  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#fef2f2" : "#f0fdf4", border: `1px solid ${toast.type === "error" ? "#fecaca" : "#bbf7d0"}`, color: toast.type === "error" ? "#dc2626" : "#059669", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
     {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle size={18} />} {toast.msg}
   </div>
 );
@@ -37,7 +37,7 @@ await api.put(`/rh/plaintes/${plainte._id}/reply`, { reponse });
         <button onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "#f1f5f9", border: "none", borderRadius: 8, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <X size={16} color="#64748b" />
         </button>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1a2340", marginBottom: 4 }}>Répondre à la plainte</h2>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>Répondre à la plainte</h2>
         <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20 }}>
           De : <strong>{plainte.employeId?.nom || plainte.employeId?.name || "—"}</strong>
           {plainte.employeId?.departement ? ` · ${plainte.employeId.departement}` : ""}
@@ -45,7 +45,7 @@ await api.put(`/rh/plaintes/${plainte._id}/reply`, { reponse });
         {plainte.sujet && (
           <div style={{ marginBottom: 10 }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Sujet</p>
-            <p style={{ fontSize: 14, fontWeight: 600, color: "#1a2340", margin: 0 }}>{plainte.sujet}</p>
+            <p style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", margin: 0 }}>{plainte.sujet}</p>
           </div>
         )}
         <div style={{ background: "#f8fafc", borderRadius: 10, padding: "14px 16px", marginBottom: 20 }}>
@@ -54,7 +54,7 @@ await api.put(`/rh/plaintes/${plainte._id}/reply`, { reponse });
         </div>
         <label style={{ fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Votre réponse *</label>
         <textarea value={reponse} onChange={e => setReponse(e.target.value)} rows={4} placeholder="Rédigez votre réponse..."
-          style={{ width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", resize: "vertical", boxSizing: "border-box", marginBottom: 16 }} />
+          style={{ width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#0f172a", outline: "none", background: "#f8fafc", resize: "vertical", boxSizing: "border-box", marginBottom: 16 }} />
         <button onClick={handleReply} disabled={loading || !reponse.trim()}
           style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: !reponse.trim() ? "#e2e8f0" : "linear-gradient(135deg,#3b82f6,#2563eb)", color: !reponse.trim() ? "#94a3b8" : "#fff", fontWeight: 700, fontSize: 14, cursor: !reponse.trim() ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
           <Send size={15} /> {loading ? "Envoi..." : "Envoyer la réponse"}
@@ -68,18 +68,18 @@ function PlainteCard({ p, onReply }) {
   const statut = statutConfig[p.statut] || { label: p.statut, color: "#6b7280", bg: "#f1f5f9" };
   const initiale = (p.employeId?.nom || p.employeId?.name || "?")[0].toUpperCase();
   return (
-    <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", boxShadow: "0 2px 12px rgba(30,60,120,0.07)", borderLeft: `3px solid ${statut.color}` }}>
+    <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid #f1f5f9", borderLeft: `3px solid ${statut.color}` }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14, flexWrap: "wrap" }}>
         <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 15, color: "#ef4444", flexShrink: 0 }}>
           {initiale}
         </div>
         <div style={{ flex: 1 }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: "#1a2340", margin: 0 }}>{p.employeId?.nom || p.employeId?.name || "—"}</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: "#0f172a", margin: 0 }}>{p.employeId?.nom || p.employeId?.name || "—"}</p>
           <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>{p.employeId?.departement || "—"} · {new Date(p.createdAt).toLocaleDateString("fr-FR")}</p>
         </div>
-        <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700 }}>{statut.label}</span>
+        <span style={{ background: statut.bg, color: statut.color, borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700 }}>{statut.label}</span>
       </div>
-      {p.sujet && <p style={{ fontSize: 14, fontWeight: 700, color: "#1a2340", marginBottom: 6 }}>{p.sujet}</p>}
+      {p.sujet && <p style={{ fontSize: 14, fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>{p.sujet}</p>}
       <div style={{ background: "#f8fafc", borderRadius: 10, padding: "12px 14px", marginBottom: p.reponse || p.statut === "EN_ATTENTE" ? 12 : 0 }}>
         <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.6, margin: 0 }}>{p.message || p.description || "—"}</p>
       </div>
@@ -129,19 +129,19 @@ export default function Plaintes() {
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
         {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(37,99,235,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
+        <div style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "48px 24px 60px", position: "relative", overflow: "hidden" }}>
+          
           <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
-            <span style={{ display: "inline-block", background: "rgba(239,68,68,0.15)", color: "#fca5a5", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+            <span style={{ display: "inline-block", background: "#f0fdfa", color: "#0891b2", border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
               Portail RH
             </span>
-            <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Plaintes des Employés</h1>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, margin: 0 }}>{plaintes.length} plainte{plaintes.length !== 1 ? "s" : ""}</p>
+            <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#0f172a", margin: "0 0 8px" }}>Plaintes des Employés</h1>
+            <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>{plaintes.length} plainte{plaintes.length !== 1 ? "s" : ""}</p>
           </div>
         </div>
 
         {/* Content */}
-        <div style={{ maxWidth: 900, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
 
           {/* Filters */}
           <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
@@ -149,7 +149,7 @@ export default function Plaintes() {
               const count = f.key === "ALL" ? plaintes.length : plaintes.filter(p => p.statut === f.key).length;
               const active = filter === f.key;
               return (
-                <button key={f.key} onClick={() => setFilter(f.key)} style={{ padding: "8px 18px", borderRadius: 20, border: active ? "none" : "1.5px solid #e2e8f0", background: active ? "#1a2340" : "#fff", color: active ? "#fff" : "#64748b", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
+                <button key={f.key} onClick={() => setFilter(f.key)} style={{ padding: "8px 18px", borderRadius: 20, border: active ? "none" : "1.5px solid #e2e8f0", background: active ? "#0f172a" : "#fff", color: active ? "#fff" : "#64748b", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
                   {f.label} ({count})
                 </button>
               );
@@ -161,7 +161,7 @@ export default function Plaintes() {
               {Array(3).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 14, height: 120, opacity: 0.4 }} />)}
             </div>
           ) : filtered.length === 0 ? (
-            <div style={{ background: "#fff", borderRadius: 20, padding: "60px 24px", textAlign: "center", boxShadow: "0 2px 16px rgba(30,60,120,0.07)" }}>
+            <div style={{ background: "#fff", borderRadius: 20, padding: "60px 24px", textAlign: "center", border: "1px solid #f1f5f9" }}>
               <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#ecfdf5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                 <CheckCircle size={24} color="#059669" />
               </div>

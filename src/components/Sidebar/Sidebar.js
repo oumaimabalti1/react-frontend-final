@@ -20,28 +20,48 @@ export default function Sidebar() {
   const isActive = (p) => location.pathname === p;
 
   return (
-    <nav style={{ position:"fixed",top:0,left:0,width:240,height:"100vh",background:"linear-gradient(180deg,#0f172a 0%,#1e293b 100%)",display:"flex",flexDirection:"column",zIndex:40,boxShadow:"4px 0 24px rgba(0,0,0,0.18)" }}>
+    <nav style={{
+      position: "fixed", top: 0, left: 0, width: 240, height: "100vh",
+      background: "#ffffff", display: "flex", flexDirection: "column",
+      zIndex: 40, borderRight: "1px solid #e2e8f0"
+    }}>
       {/* Logo */}
-      <div style={{ padding:"28px 24px 20px",borderBottom:"1px solid rgba(255,255,255,0.07)" }}>
-        <div style={{ display:"flex",alignItems:"center",gap:10 }}>
-          <div style={{ width:36,height:36,borderRadius:10,background:"linear-gradient(135deg,#3b82f6,#1d4ed8)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:800,color:"#fff",boxShadow:"0 4px 12px rgba(59,130,246,0.4)" }}>E</div>
+      <div style={{ padding: "24px 20px 20px", borderBottom: "1px solid #f1f5f9" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: "#0891b2", display: "flex", alignItems: "center",
+            justifyContent: "center", fontSize: 18, fontWeight: 800, color: "#fff",
+            boxShadow: "0 2px 8px rgba(8,145,178,0.3)"
+          }}>E</div>
           <div>
-            <div style={{ color:"#fff",fontWeight:700,fontSize:16,lineHeight:1 }}>EasyRH</div>
-            <div style={{ color:"#64748b",fontSize:11,marginTop:2 }}>Admin Panel</div>
+            <div style={{ color: "#0f172a", fontWeight: 700, fontSize: 16, lineHeight: 1 }}>EasyRH</div>
+            <div style={{ color: "#94a3b8", fontSize: 11, marginTop: 2 }}>Admin Panel</div>
           </div>
         </div>
       </div>
 
       {/* Menu */}
-      <div style={{ flex:1,padding:"16px 12px",overflowY:"auto" }}>
-        <p style={{ color:"#475569",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.1em",padding:"0 12px",marginBottom:8 }}>Navigation</p>
-        <ul style={{ listStyle:"none",padding:0,margin:0 }}>
+      <div style={{ flex: 1, padding: "16px 12px", overflowY: "auto" }}>
+        <p style={{
+          color: "#94a3b8", fontSize: 10, fontWeight: 700, textTransform: "uppercase",
+          letterSpacing: "0.1em", padding: "0 12px", marginBottom: 8
+        }}>Navigation</p>
+        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {menuItems.map((item) => {
             const active = isActive(item.to);
             return (
-              <li key={item.label} style={{ marginBottom:4 }}>
-                <Link to={item.to} style={{ display:"flex",alignItems:"center",gap:12,padding:"10px 14px",borderRadius:10,textDecoration:"none",color:active?"#fff":"#94a3b8",background:active?"linear-gradient(135deg,#3b82f6,#1d4ed8)":"transparent",fontWeight:active?600:500,fontSize:14,boxShadow:active?"0 4px 12px rgba(59,130,246,0.3)":"none" }}>
-                  <span style={{ opacity:active?1:0.7 }}>{item.icon}</span>
+              <li key={item.label} style={{ marginBottom: 4 }}>
+                <Link to={item.to} style={{
+                  display: "flex", alignItems: "center", gap: 12,
+                  padding: "10px 14px", borderRadius: 10, textDecoration: "none",
+                  color: active ? "#0891b2" : "#64748b",
+                  background: active ? "#f0fdfa" : "transparent",
+                  fontWeight: active ? 700 : 500, fontSize: 14,
+                  borderLeft: active ? "3px solid #0891b2" : "3px solid transparent",
+                  transition: "all 0.15s"
+                }}>
+                  <span style={{ color: active ? "#0891b2" : "#94a3b8" }}>{item.icon}</span>
                   {item.label}
                 </Link>
               </li>
@@ -51,12 +71,19 @@ export default function Sidebar() {
       </div>
 
       {/* User */}
-      <div style={{ padding:"16px 12px",borderTop:"1px solid rgba(255,255,255,0.07)" }}>
-        <div style={{ display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(255,255,255,0.04)",borderRadius:10 }}>
-          <div style={{ width:32,height:32,borderRadius:8,background:"linear-gradient(135deg,#10b981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:700,color:"#fff" }}>A</div>
+      <div style={{ padding: "16px 12px", borderTop: "1px solid #f1f5f9" }}>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "10px 14px", background: "#f8fafc", borderRadius: 10
+        }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: "#0891b2", display: "flex", alignItems: "center",
+            justifyContent: "center", fontSize: 14, fontWeight: 700, color: "#fff"
+          }}>A</div>
           <div>
-            <div style={{ color:"#fff",fontSize:13,fontWeight:600 }}>Admin</div>
-            <div style={{ color:"#64748b",fontSize:11 }}>Administrateur</div>
+            <div style={{ color: "#0f172a", fontSize: 13, fontWeight: 600 }}>Admin</div>
+            <div style={{ color: "#94a3b8", fontSize: 11 }}>Administrateur</div>
           </div>
         </div>
       </div>

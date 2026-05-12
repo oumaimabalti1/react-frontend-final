@@ -6,12 +6,19 @@ import api from "services/api";
 
 const emptyForm = { nomEntreprise: "", emailEntreprise: "", secteur: "", nomRH: "", emailRH: "", passwordRH: "" };
 
-/* ── Reusable components ───────────────────────────────────── */
 function Toast({ toast }) {
   if (!toast) return null;
   const isError = toast.type === "error";
   return (
-    <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: isError ? "#ef4444" : "#10b981", color: "#fff", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
+    <div style={{
+      position: "fixed", top: 24, right: 24, zIndex: 9999,
+      background: isError ? "#fef2f2" : "#f0fdf4",
+      border: `1px solid ${isError ? "#fecaca" : "#bbf7d0"}`,
+      color: isError ? "#dc2626" : "#059669",
+      borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14,
+      boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+      display: "flex", alignItems: "center", gap: 8
+    }}>
       {isError ? <XCircle size={16} /> : <CheckCircle size={16} />} {toast.msg}
     </div>
   );
@@ -19,18 +26,35 @@ function Toast({ toast }) {
 
 function ConfirmModal({ onConfirm, onCancel, loading }) {
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ background: "#fff", borderRadius: 20, padding: "36px 40px", maxWidth: 400, width: "90%", textAlign: "center", boxShadow: "0 8px 40px rgba(0,0,0,0.2)" }}>
-        <div style={{ width: 56, height: 56, borderRadius: 16, background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+    <div style={{
+      position: "fixed", inset: 0, background: "rgba(0,0,0,0.3)",
+      zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center"
+    }}>
+      <div style={{
+        background: "#fff", borderRadius: 20, padding: "36px 40px",
+        maxWidth: 400, width: "90%", textAlign: "center",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.15)"
+      }}>
+        <div style={{
+          width: 56, height: 56, borderRadius: 16, background: "#fef2f2",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          margin: "0 auto 16px"
+        }}>
           <AlertTriangle size={26} color="#ef4444" />
         </div>
-        <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a2340", marginBottom: 8 }}>Confirmer la suppression</h3>
-        <p style={{ color: "#6b7280", marginBottom: 28, lineHeight: 1.6 }}>
+        <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", marginBottom: 8 }}>Confirmer la suppression</h3>
+        <p style={{ color: "#64748b", marginBottom: 28, lineHeight: 1.6 }}>
           Cette action supprimera l'entreprise et <strong>tous ses utilisateurs associés</strong>. Irréversible.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-          <button onClick={onCancel} style={{ padding: "10px 24px", borderRadius: 10, border: "2px solid #e5e7eb", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>Annuler</button>
-          <button onClick={onConfirm} disabled={loading} style={{ padding: "10px 24px", borderRadius: 10, border: "none", background: "#ef4444", color: "#fff", fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={onCancel} style={{
+            padding: "10px 24px", borderRadius: 10, border: "1.5px solid #e2e8f0",
+            background: "#fff", color: "#475569", fontWeight: 600, cursor: "pointer"
+          }}>Annuler</button>
+          <button onClick={onConfirm} disabled={loading} style={{
+            padding: "10px 24px", borderRadius: 10, border: "none",
+            background: "#ef4444", color: "#fff", fontWeight: 600, cursor: "pointer"
+          }}>
             {loading ? "Suppression..." : "Supprimer"}
           </button>
         </div>
@@ -42,9 +66,20 @@ function ConfirmModal({ onConfirm, onCancel, loading }) {
 function FormField({ label, name, type = "text", value, onChange, placeholder }) {
   return (
     <div>
-      <label style={{ fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>{label} *</label>
+      <label style={{
+        fontSize: 13, fontWeight: 600, color: "#64748b",
+        display: "block", marginBottom: 6
+      }}>{label} *</label>
       <input name={name} type={type} value={value} onChange={onChange} required placeholder={placeholder}
-        style={{ width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", boxSizing: "border-box" }} />
+        style={{
+          width: "100%", padding: "10px 14px", borderRadius: 10,
+          border: "1.5px solid #e2e8f0", fontSize: 14, color: "#0f172a",
+          outline: "none", background: "#fafafa", boxSizing: "border-box",
+          transition: "border-color 0.15s"
+        }}
+        onFocus={e => e.target.style.borderColor = "#0891b2"}
+        onBlur={e => e.target.style.borderColor = "#e2e8f0"}
+      />
     </div>
   );
 }
@@ -52,12 +87,15 @@ function FormField({ label, name, type = "text", value, onChange, placeholder })
 function SectionLabel({ color, children }) {
   return (
     <div style={{ gridColumn: "1 / -1", marginTop: 8 }}>
-      <p style={{ fontSize: 12, fontWeight: 700, color, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16, borderBottom: "1px solid #e2e8f0", paddingBottom: 8 }}>{children}</p>
+      <p style={{
+        fontSize: 12, fontWeight: 700, color,
+        textTransform: "uppercase", letterSpacing: "0.08em",
+        marginBottom: 12, borderBottom: "1px solid #f1f5f9", paddingBottom: 8
+      }}>{children}</p>
     </div>
   );
 }
 
-/* ── Main component ────────────────────────────────────────── */
 export default function Entreprises() {
   const [entreprises, setEntreprises] = useState([]);
   const [loading, setLoading]         = useState(true);
@@ -106,52 +144,77 @@ export default function Entreprises() {
       <Toast toast={toast} />
       {confirmId && <ConfirmModal onConfirm={() => handleDelete(confirmId)} onCancel={() => setConfirmId(null)} loading={!!deletingId} />}
 
-      {/* Main content — offset by sidebar width */}
-      <div style={{ marginLeft: 240, flex: 1, minHeight: "100vh", background: "#f8fafc" }}>
+      <div style={{ marginLeft: 240, flex: 1, minHeight: "100vh" }}>
         <DNavbar />
 
-        <div style={{ padding: "40px 36px" }}>
+        <div style={{ padding: "36px 36px" }}>
 
           {/* Header */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
             <div>
-              <h1 style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", margin: 0 }}>Gestion des Entreprises</h1>
-              <p style={{ color: "#94a3b8", fontSize: 14, marginTop: 4 }}>
+              <span style={{
+                display: "inline-block", background: "#f0fdfa", color: "#0891b2",
+                border: "1px solid #99f6e4", borderRadius: 8, padding: "4px 12px",
+                fontSize: 11, fontWeight: 700, letterSpacing: "0.08em",
+                textTransform: "uppercase", marginBottom: 12
+              }}>Gestion</span>
+              <h1 style={{ fontSize: 26, fontWeight: 800, color: "#0f172a", margin: "0 0 4px" }}>Entreprises</h1>
+              <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>
                 {entreprises.length} entreprise{entreprises.length !== 1 ? "s" : ""} enregistrée{entreprises.length !== 1 ? "s" : ""}
               </p>
             </div>
             <button onClick={() => { setShowForm(!showForm); setFormError(""); }}
-              style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "#e2e8f0" : "linear-gradient(135deg,#3b82f6,#1d4ed8)", color: showForm ? "#374151" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+              style={{
+                padding: "11px 22px", borderRadius: 12, border: "none",
+                background: showForm ? "#f1f5f9" : "#0891b2",
+                color: showForm ? "#475569" : "#fff",
+                fontWeight: 700, fontSize: 14, cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 8,
+                boxShadow: showForm ? "none" : "0 2px 8px rgba(8,145,178,0.3)"
+              }}>
               {showForm ? <><X size={16} /> Annuler</> : <><Plus size={16} /> Nouvelle Entreprise</>}
             </button>
           </div>
 
           {/* Form */}
           {showForm && (
-            <form onSubmit={handleCreate} style={{ background: "#fff", borderRadius: 20, padding: 32, boxShadow: "0 2px 20px rgba(30,60,120,0.08)", marginBottom: 32 }}>
-              <h2 style={{ fontSize: 17, fontWeight: 700, color: "#1a2340", marginBottom: 24 }}>Créer une entreprise + compte RH</h2>
+            <form onSubmit={handleCreate} style={{
+              background: "#fff", borderRadius: 16, padding: 32,
+              border: "1px solid #f1f5f9", marginBottom: 28
+            }}>
+              <h2 style={{ fontSize: 17, fontWeight: 700, color: "#0f172a", marginBottom: 24 }}>Créer une entreprise + compte RH</h2>
 
               {formError && (
-                <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "12px 16px", color: "#dc2626", fontSize: 13, marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{
+                  background: "#fef2f2", border: "1px solid #fecaca",
+                  borderRadius: 10, padding: "12px 16px", color: "#dc2626",
+                  fontSize: 13, marginBottom: 20, display: "flex", alignItems: "center", gap: 8
+                }}>
                   <XCircle size={14} /> {formError}
                 </div>
               )}
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                <SectionLabel color="#3b82f6">Informations de l'entreprise</SectionLabel>
+                <SectionLabel color="#0891b2">Informations de l'entreprise</SectionLabel>
                 <FormField label="Nom de l'entreprise" name="nomEntreprise" value={form.nomEntreprise} onChange={onChange} placeholder="Ex: TechCorp" />
                 <FormField label="Email de l'entreprise" name="emailEntreprise" type="email" value={form.emailEntreprise} onChange={onChange} placeholder="contact@techcorp.com" />
                 <FormField label="Secteur" name="secteur" value={form.secteur} onChange={onChange} placeholder="Ex: Informatique" />
 
                 <SectionLabel color="#059669">Compte Responsable RH</SectionLabel>
-                <FormField label="Nom du RH" name="nomRH" value={form.nomRH} onChange={onChange} placeholder="rh name" />
+                <FormField label="Nom du RH" name="nomRH" value={form.nomRH} onChange={onChange} placeholder="Nom du responsable" />
                 <FormField label="Email du RH" name="emailRH" type="email" value={form.emailRH} onChange={onChange} placeholder="rh@company.com" />
                 <FormField label="Mot de passe RH" name="passwordRH" type="password" value={form.passwordRH} onChange={onChange} placeholder="••••••••" />
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 28 }}>
                 <button type="submit" disabled={formLoading}
-                  style={{ padding: "12px 32px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#059669,#047857)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+                  style={{
+                    padding: "12px 32px", borderRadius: 12, border: "none",
+                    background: "#059669", color: "#fff", fontWeight: 700,
+                    fontSize: 14, cursor: "pointer", display: "flex",
+                    alignItems: "center", gap: 8,
+                    boxShadow: "0 2px 8px rgba(5,150,105,0.3)"
+                  }}>
                   <CheckCircle size={16} /> {formLoading ? "Création..." : "Créer l'entreprise"}
                 </button>
               </div>
@@ -159,11 +222,21 @@ export default function Entreprises() {
           )}
 
           {/* Table */}
-          <div style={{ background: "#fff", borderRadius: 20, boxShadow: "0 2px 20px rgba(30,60,120,0.07)", overflow: "hidden" }}>
-            <div style={{ padding: "20px 28px", borderBottom: "1px solid #f0f2f8", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2 style={{ fontSize: 16, fontWeight: 700, color: "#1a2340", margin: 0 }}>Liste des entreprises</h2>
+          <div style={{
+            background: "#fff", borderRadius: 16,
+            border: "1px solid #f1f5f9", overflow: "hidden"
+          }}>
+            <div style={{
+              padding: "18px 28px", borderBottom: "1px solid #f1f5f9",
+              display: "flex", justifyContent: "space-between", alignItems: "center"
+            }}>
+              <h2 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", margin: 0 }}>Liste des entreprises</h2>
               <button onClick={fetchEntreprises}
-                style={{ padding: "7px 14px", borderRadius: 8, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+                style={{
+                  padding: "7px 14px", borderRadius: 8, border: "1.5px solid #e2e8f0",
+                  background: "#fff", color: "#475569", fontSize: 13, fontWeight: 600,
+                  cursor: "pointer", display: "flex", alignItems: "center", gap: 6
+                }}>
                 <RefreshCw size={14} /> Actualiser
               </button>
             </div>
@@ -177,32 +250,50 @@ export default function Entreprises() {
                 <thead>
                   <tr style={{ background: "#f8fafc" }}>
                     {["Entreprise", "Email", "Secteur", "Action"].map(h => (
-                      <th key={h} style={{ padding: "12px 24px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "#6b7280", textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid #f0f2f8" }}>{h}</th>
+                      <th key={h} style={{
+                        padding: "12px 24px", textAlign: "left", fontSize: 11,
+                        fontWeight: 700, color: "#94a3b8", textTransform: "uppercase",
+                        letterSpacing: "0.06em", borderBottom: "1px solid #f1f5f9"
+                      }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {entreprises.map((ent, i) => (
                     <tr key={ent._id}
-                      style={{ borderBottom: i < entreprises.length - 1 ? "1px solid #f0f2f8" : "none" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "#fafbff"}
+                      style={{ borderBottom: i < entreprises.length - 1 ? "1px solid #f1f5f9" : "none", transition: "background 0.1s" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#f8fafc"}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                     >
                       <td style={{ padding: "16px 24px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                          <div style={{ width: 36, height: 36, borderRadius: 10, background: "#eff6ff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#2563eb", fontSize: 15 }}>
+                          <div style={{
+                            width: 36, height: 36, borderRadius: 10,
+                            background: "#f0fdfa", display: "flex",
+                            alignItems: "center", justifyContent: "center",
+                            fontWeight: 700, color: "#0891b2", fontSize: 15
+                          }}>
                             {(ent.name || "?")[0].toUpperCase()}
                           </div>
-                          <span style={{ fontWeight: 600, color: "#1a2340" }}>{ent.name}</span>
+                          <span style={{ fontWeight: 600, color: "#0f172a" }}>{ent.name}</span>
                         </div>
                       </td>
-                      <td style={{ padding: "16px 24px", color: "#6b7280", fontSize: 14 }}>{ent.email}</td>
+                      <td style={{ padding: "16px 24px", color: "#64748b", fontSize: 14 }}>{ent.email}</td>
                       <td style={{ padding: "16px 24px" }}>
-                        <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600 }}>{ent.secteur || "—"}</span>
+                        <span style={{
+                          background: "#f0fdfa", color: "#0891b2",
+                          borderRadius: 8, padding: "4px 12px",
+                          fontSize: 12, fontWeight: 600
+                        }}>{ent.secteur || "—"}</span>
                       </td>
                       <td style={{ padding: "16px 24px" }}>
                         <button onClick={() => setConfirmId(ent._id)}
-                          style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: "#fef2f2", color: "#ef4444", fontWeight: 600, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+                          style={{
+                            padding: "7px 16px", borderRadius: 8, border: "none",
+                            background: "#fef2f2", color: "#ef4444",
+                            fontWeight: 600, fontSize: 13, cursor: "pointer",
+                            display: "flex", alignItems: "center", gap: 6
+                          }}>
                           <Trash2 size={13} /> Supprimer
                         </button>
                       </td>

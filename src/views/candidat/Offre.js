@@ -48,6 +48,9 @@ export default function Offre() {
   const [search, setSearch]     = useState("");
   const [domaine, setDomaine]   = useState("Tous");
   const [periode, setPeriode]   = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const fileRef = useRef();
 
@@ -120,7 +123,7 @@ export default function Offre() {
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
           <div style={{ background: "#fff", borderRadius: 24, width: "100%", maxWidth: 600, boxShadow: "0 8px 40px rgba(0,0,0,0.2)", maxHeight: "90vh", overflowY: "auto", position: "relative" }}>
 
-            <button onClick={closeModal} style={{ position: "absolute", top: 14, right: 14, background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 8, width: 32, height: 32, cursor: "pointer", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <button onClick={closeModal} style={{ position: "absolute", top: 14, right: 14, background: "#f1f5f9", border: "none", borderRadius: 8, width: 32, height: 32, cursor: "pointer", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <X size={16} color="#fff" />
             </button>
 
@@ -129,32 +132,32 @@ export default function Offre() {
                 <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(16,185,129,0.1)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
                   <CheckCircle size={36} color="#10b981" />
                 </div>
-                <h2 style={{ fontSize: 22, fontWeight: 800, color: "#1a2340", marginBottom: 8 }}>Candidature envoyée !</h2>
+                <h2 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>Candidature envoyée !</h2>
                 <p style={{ color: "#6b7280", marginBottom: 28, lineHeight: 1.6 }}>Votre candidature pour <strong>{selected.titre}</strong> a été soumise.</p>
                 <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
                   <button onClick={closeModal} style={{ padding: "11px 24px", borderRadius: 12, border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>Continuer</button>
-                  <Link to="/candidat/applications" style={{ padding: "11px 24px", borderRadius: 12, background: "linear-gradient(135deg,#0891b2,#0e7490)", color: "#fff", fontWeight: 600, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}>
+                  <Link to="/candidat/applications" style={{ padding: "11px 24px", borderRadius: 12, background: "#0891b2", color: "#fff", fontWeight: 600, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}>
                     Mes candidatures <UserCheck size={15} />
                   </Link>
                 </div>
               </div>
             ) : (
               <>
-                <div style={{ background: "linear-gradient(135deg,#0f172a,#164e63)", borderRadius: "24px 24px 0 0", padding: "28px 36px" }}>
+                <div style={{ background: "#f0fdfa", borderRadius: "24px 24px 0 0", padding: "28px 36px" }}>
                   <div style={{ width: 46, height: 46, borderRadius: 13, background: "rgba(8,145,178,0.2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
                     <Briefcase size={22} color="#67e8f9" />
                   </div>
                   <h2 style={{ fontSize: 20, fontWeight: 800, color: "#fff", margin: "0 0 10px" }}>{selected.titre}</h2>
                   {/* Domaine badge dans modal */}
                   {selected.domaine && selected.domaine !== "Autre" && (
-                    <span style={{ display: "inline-block", background: "rgba(8,145,178,0.25)", color: "#67e8f9", borderRadius: 20, padding: "3px 12px", fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
+                    <span style={{ display: "inline-block", background: "#f0fdfa", color: "#0891b2", border: "1px solid #99f6e4", borderRadius: 8, padding: "3px 12px", fontSize: 12, fontWeight: 600, marginBottom: 8 }}>
                       {selected.domaine}
                     </span>
                   )}
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    {selected.entrepriseId?.nom     && <span style={{ background: "rgba(255,255,255,0.1)",   color: "#e2e8f0", borderRadius: 20, padding: "3px 12px", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}><Building2 size={12} />{selected.entrepriseId.nom}</span>}
-                    {selected.entrepriseId?.secteur && <span style={{ background: "rgba(8,145,178,0.25)",    color: "#67e8f9", borderRadius: 20, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>{selected.entrepriseId.secteur}</span>}
-                    {selected.entrepriseId?.email   && <span style={{ background: "rgba(255,255,255,0.07)", color: "#94a3b8", borderRadius: 20, padding: "3px 12px", fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}><Mail size={11} />{selected.entrepriseId.email}</span>}
+                    {selected.entrepriseId?.nom     && <span style={{ background: "#f8fafc", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, padding: "3px 12px", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}><Building2 size={12} />{selected.entrepriseId.nom}</span>}
+                    {selected.entrepriseId?.secteur && <span style={{ background: "#f0fdfa", color: "#0891b2", borderRadius: 8, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>{selected.entrepriseId.secteur}</span>}
+                    {selected.entrepriseId?.email   && <span style={{ background: "#f8fafc", color: "#64748b", border: "1px solid #e2e8f0", borderRadius: 8, padding: "3px 12px", fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}><Mail size={11} />{selected.entrepriseId.email}</span>}
                   </div>
                 </div>
 
@@ -167,7 +170,7 @@ export default function Offre() {
                 <div style={{ height: 1, background: "#f0f2f8", margin: "0 36px" }} />
 
                 <div style={{ padding: "20px 36px 32px" }}>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", marginBottom: 4, display: "flex", alignItems: "center", gap: 8 }}>
+                  <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", marginBottom: 4, display: "flex", alignItems: "center", gap: 8 }}>
                     <FileText size={16} color="#0891b2" /> Votre CV
                   </h3>
                   <p style={{ fontSize: 13, color: "#94a3b8", marginBottom: 14 }}>Un CV est requis pour postuler</p>
@@ -187,7 +190,7 @@ export default function Offre() {
                     <div style={{ border: "1.5px solid #0891b2", borderRadius: 12, padding: "12px 16px", background: "rgba(8,145,178,0.05)", display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
                       <FileText size={22} color="#0891b2" />
                       <div style={{ flex: 1 }}>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: "#1a2340", margin: 0 }}>{cvFile.name}</p>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: "#0f172a", margin: 0 }}>{cvFile.name}</p>
                         <p style={{ fontSize: 11, color: "#6b7280", marginTop: 2 }}>{(cvFile.size / 1024).toFixed(0)} KB</p>
                       </div>
                       <button onClick={() => setCvFile(null)} style={{ background: "none", border: "none", cursor: "pointer" }}><X size={15} color="#94a3b8" /></button>
@@ -233,93 +236,204 @@ export default function Offre() {
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
         {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#164e63 60%,#1e293b 100%)", padding: "64px 24px 80px", position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "48px 24px 60px" }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(8,145,178,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
           <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20, marginBottom: 28 }}>
               <div>
-                <span style={{ display: "inline-block", background: "rgba(8,145,178,0.15)", color: "#67e8f9", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+                <span style={{ display: "inline-block", background: "#f0fdfa", color: "#0891b2", border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
                   Portail Candidat
                 </span>
                 <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 10px" }}>Offres d'emploi</h1>
-                <p style={{ fontSize: 15, color: "rgba(255,255,255,0.5)", margin: 0 }}>
+                <p style={{ fontSize: 15, color: "#94a3b8", margin: 0 }}>
                   {loading ? "Chargement..." : `${offres.length} offre${offres.length !== 1 ? "s" : ""} disponible${offres.length !== 1 ? "s" : ""}`}
                 </p>
               </div>
-              <Link to="/candidat/applications" style={{ padding: "11px 22px", borderRadius: 12, border: "1.5px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.07)", color: "#fff", fontWeight: 600, fontSize: 14, textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
+              <Link to="/candidat/applications" style={{ padding: "11px 22px", borderRadius: 12, border: "1.5px solid #e2e8f0", background: "#fff", color: "#475569", fontWeight: 600, fontSize: 14, textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
                 <UserCheck size={16} /> Mes candidatures
               </Link>
             </div>
 
-            {/* ── Search bar dans le hero ── */}
-            <div style={{ display: "flex", alignItems: "center", background: "rgba(255,255,255,0.1)", borderRadius: 12, padding: "10px 16px", gap: 10, border: "1.5px solid rgba(255,255,255,0.2)" }}>
-              <Search size={18} color="rgba(255,255,255,0.6)" />
-              <input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Rechercher un poste, une compétence..."
-                style={{ flex: 1, background: "none", border: "none", outline: "none", color: "white", fontSize: 14 }}
-              />
-              {search && <X size={16} color="rgba(255,255,255,0.6)" style={{ cursor: "pointer" }} onClick={() => setSearch("")} />}
+            {/* ── Search bar avec autocomplete + bouton filtres ── */}
+            <div style={{ position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", background: "#f8fafc", borderRadius: 12, padding: "10px 16px", gap: 10, border: "1.5px solid #e2e8f0" }}>
+                <Search size={18} color="#94a3b8" />
+                <input
+                  value={search}
+                  onChange={e => {
+                    const val = e.target.value;
+                    setSearch(val);
+                    if (val.trim().length >= 2) {
+                      const filtered = offres
+                        .map(o => o.titre)
+                        .filter((t, i, arr) => arr.indexOf(t) === i)
+                        .filter(t => t.toLowerCase().includes(val.toLowerCase()))
+                        .slice(0, 5);
+                      setSuggestions(filtered);
+                      setShowSuggestions(filtered.length > 0);
+                    } else {
+                      setShowSuggestions(false);
+                    }
+                  }}
+                  onFocus={() => {
+                    if (search.trim().length >= 2 && suggestions.length > 0) setShowSuggestions(true);
+                  }}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                  onKeyDown={e => { if (e.key === "Enter") { setShowSuggestions(false); fetchOffres(); } }}
+                  placeholder="Rechercher un poste, une compétence..."
+                  style={{ flex: 1, background: "none", border: "none", outline: "none", color: "#0f172a", fontSize: 14 }}
+                />
+                {search && <X size={16} color="#94a3b8" style={{ cursor: "pointer" }} onClick={() => { setSearch(""); setShowSuggestions(false); }} />}
+                
+                {/* Bouton filtres avancés */}
+                <div style={{ width: 1, height: 24, background: "#e2e8f0" }} />
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  style={{
+                    background: showFilters || activeFilters > 0 ? "#f0fdfa" : "#f8fafc",
+                    border: "none", borderRadius: 8, padding: "6px 12px",
+                    color: showFilters || activeFilters > 0 ? "#0891b2" : "#64748b",
+                    cursor: "pointer", display: "flex", alignItems: "center", gap: 6,
+                    fontSize: 13, fontWeight: 600, transition: "all 0.2s"
+                  }}
+                >
+                  <Filter size={14} />
+                  Filtres
+                  {activeFilters > 0 && (
+                    <span style={{ background: "#0891b2", color: "white", borderRadius: 10, padding: "1px 7px", fontSize: 10, fontWeight: 700 }}>
+                      {activeFilters}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {/* Suggestions dropdown */}
+              {showSuggestions && !showFilters && (
+                <div style={{
+                  position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4,
+                  background: "white", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
+                  overflow: "hidden", zIndex: 200
+                }}>
+                  {suggestions.map((s, i) => (
+                    <div
+                      key={i}
+                      onMouseDown={() => { setSearch(s); setShowSuggestions(false); }}
+                      style={{
+                        padding: "10px 16px", cursor: "pointer", fontSize: 14, color: "#0f172a",
+                        display: "flex", alignItems: "center", gap: 8,
+                        background: "white", borderBottom: i < suggestions.length - 1 ? "1px solid #f1f5f9" : "none",
+                        transition: "background 0.15s"
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#f0fdfa"}
+                      onMouseLeave={e => e.currentTarget.style.background = "white"}
+                    >
+                      <Search size={14} color="#94a3b8" />
+                      <span>{s}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* ── Popup filtres avancés (style Gmail) ── */}
+              {showFilters && (
+                <>
+                  <div onClick={() => setShowFilters(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.3)", zIndex: 9990 }} />
+                  <div style={{
+                    position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+                    width: "90%", maxWidth: 500,
+                    background: "white", borderRadius: 16, boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+                    padding: "28px 32px", zIndex: 9999
+                  }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", margin: 0 }}>Filtres avancés</h3>
+                    <button onClick={() => setShowFilters(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+                      <X size={18} color="#94a3b8" />
+                    </button>
+                  </div>
+
+                  {/* Domaine */}
+                  <div style={{ marginBottom: 16 }}>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "#64748b", marginBottom: 8, display: "block" }}>Domaine</label>
+                    <select
+                      value={domaine}
+                      onChange={e => setDomaine(e.target.value)}
+                      style={{
+                        width: "100%", padding: "10px 14px", borderRadius: 10,
+                        border: "1.5px solid #e2e8f0", background: "#f8fafc",
+                        color: "#374151", fontSize: 14, outline: "none", cursor: "pointer"
+                      }}
+                    >
+                      {DOMAINES.map(d => <option key={d} value={d}>{d}</option>)}
+                    </select>
+                  </div>
+
+                  {/* Période */}
+                  <div style={{ marginBottom: 20 }}>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "#64748b", marginBottom: 8, display: "block" }}>Date de publication</label>
+                    <select
+                      value={periode}
+                      onChange={e => setPeriode(e.target.value)}
+                      style={{
+                        width: "100%", padding: "10px 14px", borderRadius: 10,
+                        border: "1.5px solid #e2e8f0", background: "#f8fafc",
+                        color: "#374151", fontSize: 14, outline: "none", cursor: "pointer"
+                      }}
+                    >
+                      {PERIODES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                    </select>
+                  </div>
+
+                  {/* Boutons */}
+                  <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+                    <button
+                      onClick={() => { setDomaine("Tous"); setPeriode(""); }}
+                      style={{
+                        padding: "9px 20px", borderRadius: 10, border: "1.5px solid #e2e8f0",
+                        background: "white", color: "#64748b", fontSize: 13, fontWeight: 600, cursor: "pointer"
+                      }}
+                    >
+                      Réinitialiser
+                    </button>
+                    <button
+                      onClick={() => { setShowFilters(false); fetchOffres(); }}
+                      style={{
+                        padding: "9px 20px", borderRadius: 10, border: "none",
+                        background: "#0891b2", color: "white",
+                        fontSize: 13, fontWeight: 700, cursor: "pointer",
+                        boxShadow: "0 4px 12px rgba(8,145,178,0.3)"
+                      }}
+                    >
+                      Rechercher
+                    </button>
+                  </div>
+                </div>
+                </>
+              )}
             </div>
           </div>
         </div>
 
-        {/* ── Barre de filtres ── */}
-        <div style={{ background: "white", borderBottom: "1.5px solid #e2e8f0", padding: "12px 24px", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
-          
-          {/* Label filtres */}
-          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#64748b", fontSize: 13, fontWeight: 600, marginRight: 4 }}>
-            <Filter size={14} />
-            Filtres
-            {activeFilters > 0 && (
-              <span style={{ background: "#0891b2", color: "white", borderRadius: 10, padding: "1px 7px", fontSize: 11 }}>
-                {activeFilters}
+        {/* Filtres actifs (pills) */}
+        {activeFilters > 0 && (
+          <div style={{ background: "white", borderBottom: "1px solid #e2e8f0", padding: "10px 24px", display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 12, color: "#94a3b8", fontWeight: 500 }}>Filtres actifs :</span>
+            {domaine !== "Tous" && (
+              <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 8, padding: "4px 12px", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
+                {domaine}
+                <X size={12} style={{ cursor: "pointer" }} onClick={() => setDomaine("Tous")} />
               </span>
             )}
-          </div>
-
-          {/* Domaine buttons */}
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {DOMAINES.map(d => (
-              <button
-                key={d}
-                onClick={() => setDomaine(d)}
-                style={{
-                  padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: domaine === d ? 700 : 500,
-                  border: `1.5px solid ${domaine === d ? "#0891b2" : "#e2e8f0"}`,
-                  background: domaine === d ? "#ecfeff" : "white",
-                  color: domaine === d ? "#0891b2" : "#64748b",
-                  cursor: "pointer", transition: "all 0.15s"
-                }}
-              >
-                {d}
-              </button>
-            ))}
-          </div>
-
-          {/* Période dropdown */}
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <Clock size={14} color="#64748b" />
-            <select
-              value={periode}
-              onChange={e => setPeriode(e.target.value)}
-              style={{ padding: "6px 12px", borderRadius: 20, border: `1.5px solid ${periode ? "#0891b2" : "#e2e8f0"}`, background: periode ? "#ecfeff" : "white", color: periode ? "#0891b2" : "#374151", fontSize: 12, cursor: "pointer", outline: "none", fontWeight: periode ? 700 : 400 }}
-            >
-              {PERIODES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
-            </select>
-          </div>
-
-          {/* Reset */}
-          {activeFilters > 0 && (
-            <button
-              onClick={() => { setDomaine("Tous"); setPeriode(""); setSearch(""); }}
-              style={{ padding: "6px 14px", borderRadius: 20, border: "1.5px solid #fca5a5", background: "#fff", color: "#ef4444", fontSize: 12, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
-            >
-              <X size={12} /> Réinitialiser
+            {periode && (
+              <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 8, padding: "4px 12px", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
+                {PERIODES.find(p => p.value === periode)?.label}
+                <X size={12} style={{ cursor: "pointer" }} onClick={() => setPeriode("")} />
+              </span>
+            )}
+            <button onClick={() => { setDomaine("Tous"); setPeriode(""); }} style={{ background: "none", border: "none", color: "#ef4444", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              Tout effacer
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Grid */}
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px 60px" }}>
@@ -332,7 +446,7 @@ export default function Offre() {
               <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                 <Briefcase size={32} color="#cbd5e1" />
               </div>
-              <p style={{ fontSize: 15, fontWeight: 600, color: "#1a2340" }}>Aucune offre trouvée</p>
+              <p style={{ fontSize: 15, fontWeight: 600, color: "#0f172a" }}>Aucune offre trouvée</p>
               <p style={{ fontSize: 13, color: "#94a3b8", marginTop: 6 }}>Essayez d'autres filtres</p>
             </div>
           ) : (

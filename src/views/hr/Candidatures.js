@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   UserCheck, UserX, Briefcase, FileText, CheckCircle, XCircle,
-  Clock, Download, ChevronDown, ChevronUp, Mail, Filter
+  Clock, Download, ChevronDown, ChevronUp, Mail, Filter, FileDown, Bell
 } from "lucide-react";
 import HNavbar from "components/Navbars/HNavbar.js";
 import api from "services/api";
@@ -15,19 +15,19 @@ const statutConfig = {
 };
 
 const Toast = ({ toast }) => !toast ? null : (
-  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#ef4444" : "#10b981", color: "#fff", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
+  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#fef2f2" : "#f0fdf4", border: `1px solid ${toast.type === "error" ? "#fecaca" : "#bbf7d0"}`, color: toast.type === "error" ? "#dc2626" : "#059669", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
     {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle size={18} />} {toast.msg}
   </div>
 );
 
 function StatCard({ label, value, color, bg, icon: Icon }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", borderTop: `3px solid ${color}`, display: "flex", alignItems: "center", gap: 16 }}>
+    <div style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid #f1f5f9", borderLeft: `4px solid ${color}`, border: "1px solid #f1f5f9", display: "flex", alignItems: "center", gap: 16 }}>
       <div style={{ width: 46, height: 46, borderRadius: 12, background: bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
         <Icon size={22} color={color} />
       </div>
       <div>
-        <div style={{ fontSize: 26, fontWeight: 800, color: "#1a2340", lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: 26, fontWeight: 800, color: "#0f172a", lineHeight: 1 }}>{value}</div>
         <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 4, fontWeight: 500 }}>{label}</div>
       </div>
     </div>
@@ -43,13 +43,13 @@ function CandidatureCard({ c, onAction, actionId }) {
   const refusing  = actionId === c._id + "refuse";
 
   return (
-    <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", borderLeft: `3px solid ${statut.color}` }}>
+    <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid #f1f5f9", borderLeft: `3px solid ${statut.color}` }}>
       <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 24px", flexWrap: "wrap" }}>
         <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 16, color: "#3b82f6", flexShrink: 0 }}>
           {initiale}
         </div>
         <div style={{ flex: 1, minWidth: 160 }}>
-          <p style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", margin: 0 }}>{c.candidatId?.name || "—"}</p>
+          <p style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", margin: 0 }}>{c.candidatId?.name || "—"}</p>
           <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 3, display: "flex", alignItems: "center", gap: 4 }}>
             <Mail size={11} /> {c.candidatId?.email || "—"}
           </p>
@@ -68,7 +68,7 @@ function CandidatureCard({ c, onAction, actionId }) {
         <p style={{ fontSize: 12, color: "#94a3b8", whiteSpace: "nowrap" }}>
           {new Date(c.createdAt).toLocaleDateString("fr-FR")}
         </p>
-        <span style={{ background: statut.bg, color: statut.color, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
+        <span style={{ background: statut.bg, color: statut.color, borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
           <StatutIcon size={12} /> {statut.label}
         </span>
        
@@ -136,6 +136,56 @@ export default function Candidatures() {
 
   useEffect(() => { fetchCandidatures(); }, []);
 
+  const pendingCount = candidatures.filter(c => c.statut === "EN_ATTENTE").length;
+
+  // ═══ EXPORT PDF ═══
+  const exportPDF = () => {
+    const printWindow = window.open("", "_blank");
+    const rows = candidatures.map(c => {
+      const statut = statutConfig[c.statut]?.label || c.statut;
+      const score = c.scoreIA > 0 ? c.scoreIA + "%" : "—";
+      const date = new Date(c.createdAt).toLocaleDateString("fr-FR");
+      return `<tr>
+        <td style="padding:10px 14px;border-bottom:1px solid #e2e8f0">${c.candidatId?.name || "—"}</td>
+        <td style="padding:10px 14px;border-bottom:1px solid #e2e8f0">${c.candidatId?.email || "—"}</td>
+        <td style="padding:10px 14px;border-bottom:1px solid #e2e8f0">${c.offreId?.titre || "—"}</td>
+        <td style="padding:10px 14px;border-bottom:1px solid #e2e8f0">${score}</td>
+        <td style="padding:10px 14px;border-bottom:1px solid #e2e8f0">${statut}</td>
+        <td style="padding:10px 14px;border-bottom:1px solid #e2e8f0">${date}</td>
+      </tr>`;
+    }).join("");
+
+    printWindow.document.write(`
+      <html><head><title>Candidatures - EasyRH</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 40px; color: #0f172a; }
+        h1 { font-size: 24px; margin-bottom: 4px; }
+        p.sub { color: #94a3b8; font-size: 14px; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8fafc; padding: 10px 14px; text-align: left; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e2e8f0; }
+        td { font-size: 14px; }
+        .stats { display: flex; gap: 16px; margin-bottom: 24px; }
+        .stat { padding: 12px 20px; border-radius: 10px; border-left: 4px solid; }
+        .stat-num { font-size: 22px; font-weight: 800; }
+        .stat-label { font-size: 12px; color: #94a3b8; }
+        @media print { body { padding: 20px; } }
+      </style></head><body>
+        <h1>Candidatures - EasyRH</h1>
+        <p class="sub">${candidatures.length} candidature${candidatures.length !== 1 ? "s" : ""} · Exporté le ${new Date().toLocaleDateString("fr-FR")}</p>
+        <div class="stats">
+          <div class="stat" style="border-color:#d97706;background:#fffbeb"><div class="stat-num">${candidatures.filter(c=>c.statut==="EN_ATTENTE").length}</div><div class="stat-label">En attente</div></div>
+          <div class="stat" style="border-color:#059669;background:#ecfdf5"><div class="stat-num">${candidatures.filter(c=>c.statut==="ACCEPTEE").length}</div><div class="stat-label">Acceptées</div></div>
+          <div class="stat" style="border-color:#ef4444;background:#fef2f2"><div class="stat-num">${candidatures.filter(c=>c.statut==="REFUSEE").length}</div><div class="stat-label">Refusées</div></div>
+        </div>
+        <table><thead><tr>
+          <th>Candidat</th><th>Email</th><th>Offre</th><th>Score IA</th><th>Statut</th><th>Date</th>
+        </tr></thead><tbody>${rows}</tbody></table>
+      </body></html>
+    `);
+    printWindow.document.close();
+    setTimeout(() => printWindow.print(), 300);
+  };
+
   const handleAction = (id, action) => { setModal({ id, action }); setDateInterview(""); setMessageRH(""); };
 
   const handleConfirm = async () => {
@@ -160,7 +210,7 @@ export default function Candidatures() {
     const active = filter === key;
     return (
       <button key={key} onClick={() => setFilter(key)}
-        style={{ padding: "8px 18px", borderRadius: 20, border: active ? "none" : "1.5px solid #e2e8f0", background: active ? "#1a2340" : "#fff", color: active ? "#fff" : "#64748b", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
+        style={{ padding: "8px 18px", borderRadius: 20, border: active ? "none" : "1.5px solid #e2e8f0", background: active ? "#0f172a" : "#fff", color: active ? "#fff" : "#64748b", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
         {label} ({count})
       </button>
     );
@@ -175,7 +225,7 @@ export default function Candidatures() {
       {modal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9998, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
           <div style={{ background: "#fff", borderRadius: 20, padding: 36, width: "100%", maxWidth: 440, boxShadow: "0 8px 40px rgba(0,0,0,0.15)" }}>
-            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#1a2340", marginBottom: 6 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 800, color: "#0f172a", marginBottom: 6 }}>
               {modal.action === "accept" ? "Accepter la candidature" : "Refuser la candidature"}
             </h3>
             <p style={{ fontSize: 14, color: "#94a3b8", marginBottom: 24 }}>
@@ -207,19 +257,40 @@ export default function Candidatures() {
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
         {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(37,99,235,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
+        <div style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "48px 24px 60px", position: "relative", overflow: "hidden" }}>
+          
           <div style={{ maxWidth: 1000, margin: "0 auto", position: "relative" }}>
-            <span style={{ display: "inline-block", background: "rgba(37,99,235,0.15)", color: "#93c5fd", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+            <span style={{ display: "inline-block", background: "#f0fdfa", color: "#0891b2", border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
               Portail RH
             </span>
-            <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Candidatures reçues</h1>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, margin: 0 }}>{candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""} au total</p>
+            <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#0f172a", margin: "0 0 8px" }}>Candidatures reçues</h1>
+            <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>
+              {candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""} au total
+              {pendingCount > 0 && (
+                <span style={{ marginLeft: 12, display: "inline-flex", alignItems: "center", gap: 4, background: "#fffbeb", color: "#d97706", borderRadius: 8, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>
+                  <Bell size={12} /> {pendingCount} en attente
+                </span>
+              )}
+            </p>
+            
+            {candidatures.length > 0 && (
+              <button onClick={exportPDF} style={{
+                marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "10px 20px", borderRadius: 10, border: "1.5px solid #e2e8f0",
+                background: "#fff", color: "#475569", fontSize: 13, fontWeight: 600,
+                cursor: "pointer", transition: "all 0.15s"
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = "#0891b2"; e.currentTarget.style.color = "#0891b2"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#475569"; }}
+              >
+                <FileDown size={15} /> Exporter en PDF
+              </button>
+            )}
           </div>
         </div>
 
         {/* Content */}
-        <div style={{ maxWidth: 1000, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
 
           {/* Stats */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 28 }}>
@@ -243,11 +314,11 @@ export default function Candidatures() {
               {Array(4).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 80, opacity: 0.4 }} />)}
             </div>
           ) : filtered.length === 0 ? (
-            <div style={{ background: "#fff", borderRadius: 20, padding: "64px 24px", textAlign: "center", boxShadow: "0 2px 16px rgba(30,60,120,0.06)" }}>
+            <div style={{ background: "#fff", borderRadius: 20, padding: "64px 24px", textAlign: "center", border: "1px solid #f1f5f9" }}>
               <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(59,130,246,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                 <Briefcase size={26} color="#3b82f6" />
               </div>
-              <p style={{ color: "#1a2340", fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Aucune candidature</p>
+              <p style={{ color: "#0f172a", fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Aucune candidature</p>
               <p style={{ color: "#94a3b8", fontSize: 13 }}>Les candidatures apparaîtront ici</p>
             </div>
           ) : (

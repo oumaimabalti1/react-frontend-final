@@ -4,7 +4,7 @@ import { Briefcase, Plus, X, Edit2, Trash2, CheckCircle, XCircle, AlertTriangle 
 import api from "services/api";
 
 const Toast = ({ toast }) => !toast ? null : (
-  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#ef4444" : "#10b981", color: "#fff", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
+  <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, background: toast.type === "error" ? "#fef2f2" : "#f0fdf4", border: `1px solid ${toast.type === "error" ? "#fecaca" : "#bbf7d0"}`, color: toast.type === "error" ? "#dc2626" : "#059669", borderRadius: 12, padding: "14px 24px", fontWeight: 600, fontSize: 14, boxShadow: "0 4px 20px rgba(0,0,0,0.15)", display: "flex", alignItems: "center", gap: 8 }}>
     {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle size={18} />} {toast.msg}
   </div>
 );
@@ -64,7 +64,7 @@ export default function Offres() {
     finally { setConfirmId(null); }
   };
 
-  const input = { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#1a2340", outline: "none", background: "#f8fafc", boxSizing: "border-box", fontFamily: "inherit" };
+  const input = { width: "100%", padding: "10px 14px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 14, color: "#0f172a", outline: "none", background: "#f8fafc", boxSizing: "border-box", fontFamily: "inherit" };
   const labelStyle = { fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
 
   return (
@@ -79,7 +79,7 @@ export default function Offres() {
             <div style={{ width: 60, height: 60, borderRadius: "50%", background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
               <AlertTriangle size={28} color="#ef4444" />
             </div>
-            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a2340", marginBottom: 8 }}>Supprimer l'offre ?</h3>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", marginBottom: 8 }}>Supprimer l'offre ?</h3>
             <p style={{ color: "#6b7280", marginBottom: 32 }}>Cette action est irréversible.</p>
             <div style={{ display: "flex", gap: 12 }}>
               <button onClick={() => setConfirmId(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: "2px solid #e5e7eb", background: "#fff", color: "#374151", fontWeight: 600, cursor: "pointer" }}>Annuler</button>
@@ -96,7 +96,7 @@ export default function Offres() {
             <button onClick={() => setShowForm(false)} style={{ position: "absolute", top: 14, right: 14, background: "#f1f5f9", border: "none", borderRadius: 8, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <X size={16} color="#64748b" />
             </button>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1a2340", marginBottom: 20 }}>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 20 }}>
               {editOffre ? "Modifier l'offre" : "Publier une offre"}
             </h2>
            
@@ -118,7 +118,7 @@ export default function Offres() {
                   {["Informatique","Marketing","Finance","RH","Commercial","Juridique","Ingénierie","Design","Communication","Autre"].map(d => <option key={d} value={d}>{d}</option>)}
                 </select>
               </div>
-              <button type="submit" disabled={formLoading} style={{ width: "100%", padding: 13, borderRadius: 12, border: "none", background: "linear-gradient(135deg,#2563eb,#1d4ed8)", color: "#fff", fontWeight: 700, fontSize: 15, cursor: formLoading ? "not-allowed" : "pointer" }}>
+              <button type="submit" disabled={formLoading} style={{ width: "100%", padding: 13, borderRadius: 12, border: "none", background: "#0891b2", boxShadow: "0 2px 8px rgba(8,145,178,0.3)", color: "#fff", fontWeight: 700, fontSize: 15, cursor: formLoading ? "not-allowed" : "pointer" }}>
                 {formLoading ? "Enregistrement..." : editOffre ? "Mettre à jour" : "Publier l'offre"}
               </button>
             </form>
@@ -129,18 +129,18 @@ export default function Offres() {
       <main style={{ minHeight: "100vh", background: "#f8fafc" }}>
 
         {/* Hero */}
-        <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1e293b 100%)", padding: "120px 24px 100px", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: -60, right: -60, width: 300, height: 300, borderRadius: "50%", background: "rgba(37,99,235,0.07)", filter: "blur(60px)", pointerEvents: "none" }} />
+        <div style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "48px 24px 60px", position: "relative", overflow: "hidden" }}>
+          
           <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
-            <span style={{ display: "inline-block", background: "rgba(37,99,235,0.15)", color: "#93c5fd", borderRadius: 20, padding: "5px 16px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
+            <span style={{ display: "inline-block", background: "#f0fdfa", color: "#0891b2", border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
               Portail RH
             </span>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
               <div>
-                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Gestion des Offres</h1>
-                <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, margin: 0 }}>{offres.length} offre{offres.length !== 1 ? "s" : ""}</p>
+                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#0f172a", margin: "0 0 8px" }}>Gestion des Offres</h1>
+                <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>{offres.length} offre{offres.length !== 1 ? "s" : ""}</p>
               </div>
-              <button onClick={openNew} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#2563eb,#1d4ed8)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+              <button onClick={openNew} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: "#0891b2", boxShadow: "0 2px 8px rgba(8,145,178,0.3)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
                 <Plus size={15} /> Publier une offre
               </button>
             </div>
@@ -148,7 +148,7 @@ export default function Offres() {
         </div>
 
         {/* Content */}
-        <div style={{ maxWidth: 900, margin: "-48px auto 0", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px 60px", position: "relative", zIndex: 2 }}>
           {loading ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {Array(3).fill(0).map((_, i) => <div key={i} style={{ background: "#fff", borderRadius: 16, height: 120, opacity: 0.5 }} />)}
@@ -161,15 +161,15 @@ export default function Offres() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {offres.map(offre => (
-                <div key={offre._id} style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", boxShadow: "0 2px 16px rgba(30,60,120,0.06)", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", borderLeft: "3px solid #2563eb" }}>
+                <div key={offre._id} style={{ background: "#fff", borderRadius: 16, padding: "20px 24px", border: "1px solid #f1f5f9", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", borderLeft: "3px solid #2563eb" }}>
                   <div style={{ width: 46, height: 46, borderRadius: 12, background: "rgba(37,99,235,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <Briefcase size={20} color="#2563eb" />
                   </div>
                   <div style={{ flex: 1, minWidth: 150 }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1a2340", margin: 0 }}>{offre.titre}</h3>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", margin: 0 }}>{offre.titre}</h3>
                     <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{offre.description}</p>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
-                      {offre.domaine && <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 20, padding: "2px 10px", fontSize: 11, fontWeight: 600 }}>{offre.domaine}</span>}
+                      {offre.domaine && <span style={{ background: "#ecfeff", color: "#0891b2", borderRadius: 8, padding: "2px 10px", fontSize: 11, fontWeight: 600 }}>{offre.domaine}</span>}
                       <span style={{ fontSize: 12, color: "#94a3b8" }}>Publié le {new Date(offre.dateCreation || offre.createdAt).toLocaleDateString("fr-FR")}</span>
                     </div>
                   </div>
