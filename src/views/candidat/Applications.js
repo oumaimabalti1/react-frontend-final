@@ -85,11 +85,11 @@ export default function Applications() {
               <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>{candidatures.length} candidature{candidatures.length !== 1 ? "s" : ""}</p>
             </div>
             <Link to="/candidat/offre" style={{
-              padding: "10px 20px", borderRadius: 10, background: "#0891b2",
-              color: "#fff", fontWeight: 600, fontSize: 14, textDecoration: "none",
-              boxShadow: "0 2px 8px rgba(8,145,178,0.3)"
-            }}>
-              + Voir les offres
+  padding: "10px 20px", borderRadius: 10, background: "linear-gradient(135deg,#b6d7df,#0e7490)",
+  color: "#fff", fontWeight: 600, fontSize: 14, textDecoration: "none",
+  boxShadow: "0 2px 8px rgba(8,145,178,0.3)"
+}}>
+              Voir les offres
             </Link>
           </div>
 

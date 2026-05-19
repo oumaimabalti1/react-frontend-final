@@ -34,7 +34,7 @@ export default function HNavbar() {
 
   return (
     <>
-      <nav style={{ position:"fixed",top:0,left:0,right:0,zIndex:1000,background:"rgba(255,255,255,0.92)",backdropFilter:"blur(16px)",borderBottom:"1px solid #e2e8f0",height:64,display:"flex",alignItems:"center",padding:"0 24px",justifyContent:"space-between" }}>
+      <nav style={{ position:"fixed",top:0,left:0,right:0,zIndex:1000,background:"#b6d7df",backdropFilter:"blur(16px)",borderBottom:"1px solid #e2e8f0",height:64,display:"flex",alignItems:"center",padding:"0 24px",justifyContent:"space-between" }}>
         <Link to="/hr/accueil" style={{ display:"flex",alignItems:"center",gap:10,textDecoration:"none" }}>
           <img src={logo} alt="EasyRH" style={{ height:36,width:"auto" }} />
           <span style={{ fontSize:11,fontWeight:700,color:ACCENT,textTransform:"uppercase",letterSpacing:"0.12em",background:"#f0fdfa",border:"1px solid #99f6e4",padding:"2px 8px",borderRadius:4 }}>RH</span>

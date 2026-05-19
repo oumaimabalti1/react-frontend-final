@@ -62,7 +62,7 @@ export default function Employeelist() {
                 <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>{employees.length} employé{employees.length !== 1 ? "s" : ""}</p>
               </div>
               <button onClick={() => { setShowForm(!showForm); setFormError(""); }}
-                style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "rgba(255,255,255,0.15)" : "linear-gradient(135deg,#2563eb,#1d4ed8)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+                style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "rgba(255,255,255,0.15)" : "linear-gradient(135deg,#b6d7df,#0e7490)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
                 {showForm ? <><X size={15} /> Annuler</> : <><Plus size={15} /> Nouvel Employé</>}
               </button>
             </div>
@@ -85,8 +85,8 @@ export default function Employeelist() {
               )}
               <form onSubmit={handleCreate}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16, marginBottom: 20 }}>
-                  <div><label style={labelStyle}>Nom complet *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required style={input} placeholder="vous" /></div>
-                  <div><label style={labelStyle}>Email *</label><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required style={input} placeholder="vous@exemple.com" /></div>
+                  <div><label style={labelStyle}>Nom complet *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required style={input} placeholder="nom complet" /></div>
+                  <div><label style={labelStyle}>Email *</label><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required style={input} placeholder="nom@exemple.com" /></div>
                   <div><label style={labelStyle}>Mot de passe *</label><input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required style={input} placeholder="••••••••" /></div>
                   <div>
                     <label style={labelStyle}>Département *</label>

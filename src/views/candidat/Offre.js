@@ -244,7 +244,7 @@ export default function Offre() {
                 <span style={{ display: "inline-block", background: "#f0fdfa", color: "#0891b2", border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
                   Portail Candidat
                 </span>
-                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#fff", margin: "0 0 10px" }}>Offres d'emploi</h1>
+                <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "black", margin: "0 0 10px" }}>Offres d'emploi</h1>
                 <p style={{ fontSize: 15, color: "#94a3b8", margin: 0 }}>
                   {loading ? "Chargement..." : `${offres.length} offre${offres.length !== 1 ? "s" : ""} disponible${offres.length !== 1 ? "s" : ""}`}
                 </p>

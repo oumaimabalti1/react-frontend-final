@@ -50,13 +50,9 @@ export default function NavCard({ to, icon: Icon, color, title, desc }) {
           {desc}
         </p>
 
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "10px 14px", borderRadius: 10,
-          background: hovered ? `${color}08` : "#f8fafc",
-          transition: "all 0.2s"
-        }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color }}>Accéder</span>
+        <div  style={{ marginTop:"auto",padding:11,borderRadius:11,border:"none",background:"linear-gradient(135deg,#b6d7df,#0e7490)",color:"#fff",fontWeight:600,fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8,boxShadow:"0 3px 12px rgba(8,145,178,0.3)" }}>
+        
+          <span style={{ fontSize: 14, fontWeight: 700, color: color }}>Accéder</span>
           <ArrowRight size={16} color={color} style={{
             transition: "transform 0.2s",
             transform: hovered ? "translateX(4px)" : "translateX(0)"

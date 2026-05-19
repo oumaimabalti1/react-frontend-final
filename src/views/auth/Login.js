@@ -42,7 +42,7 @@ export default function Login() {
 
       {/* Left — branding panel */}
       <div style={{
-        flex: 1, background: "linear-gradient(160deg, #0e7490, #0891b2, #06b6d4)",
+        flex: 1, background: "linear-gradient(135deg,#b6d7df,#0e7490)",
         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
         padding: "60px 48px", position: "relative", overflow: "hidden"
       }}>
@@ -133,7 +133,7 @@ export default function Login() {
             {/* Submit */}
             <button type="submit" disabled={loading} style={{
               width: "100%", padding: "14px", borderRadius: 12, border: "none",
-              background: loading ? "#e2e8f0" : "#0891b2",
+              background: loading ? "#e2e8f0" : "linear-gradient(135deg,#b6d7df,#0e7490)",
               color: loading ? "#94a3b8" : "#fff", fontWeight: 700, fontSize: 15,
               cursor: loading ? "not-allowed" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center", gap: 8,

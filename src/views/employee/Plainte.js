@@ -107,7 +107,7 @@ export default function PlaintesEmployee() {
               <h1 style={{ fontSize: 32, fontWeight: 800, color: "#0f172a", margin: "0 0 4px" }}>Mes Plaintes</h1>
               <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>Signalez un problème à votre RH</p>
             </div>
-            <button onClick={() => { setShowForm(!showForm); setFormError(""); }} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "#f1f5f9" : "#ef4444", color: showForm ? "#475569" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: showForm ? "none" : "0 2px 8px rgba(239,68,68,0.3)" }}>
+            <button onClick={() => { setShowForm(!showForm); setFormError(""); }} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#b6d7df,#0e7490)", color: showForm ? "#475569" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: showForm ? "none" : "0 2px 8px rgba(239,68,68,0.3)" }}>
               {showForm ? <><X size={15} /> Annuler</> : <><Plus size={15} /> Nouvelle plainte</>}
             </button>
           </div>

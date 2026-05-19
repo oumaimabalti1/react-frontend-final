@@ -7,18 +7,18 @@ import {
 } from "lucide-react";
 
 const features = [
-  { icon: UserPlus,   label: "Recrutement",          desc: "Publiez et gérez vos offres d'emploi avec génération IA automatique", color: "#0891b2" },
-  { icon: BarChart3,  label: "Données RH",            desc: "Tableaux de bord et statistiques en temps réel", color: "#7c3aed" },
-  { icon: Clock,      label: "Gestion du temps",      desc: "Congés, absences et suivi des demandes", color: "#059669" },
-  { icon: BadgeCheck, label: "Sécurité",              desc: "JWT, bcrypt et contrôle d'accès par rôle (RBAC)", color: "#dc2626" },
-  { icon: Smile,      label: "Expérience employé",    desc: "Portail dédié avec gestion des plaintes", color: "#ea580c" },
-  { icon: TrendingUp, label: "Scoring IA",            desc: "Évaluation automatique des CV avec score 0-100", color: "#2563eb" },
+  { icon: UserPlus,   label: "Recrutement",          desc: "Publiez et gérez vos offres d'emploi avec génération IA automatique",  },
+  { icon: BarChart3,  label: "Données RH",            desc: "Tableaux de bord et statistiques en temps réel",  },
+  { icon: Clock,      label: "Gestion du temps",      desc: "Congés, absences et suivi des demandes",  },
+  { icon: BadgeCheck, label: "Sécurité",              desc: "JWT, bcrypt et contrôle d'accès par rôle (RBAC)",  },
+  { icon: Smile,      label: "Expérience employé",    desc: "Portail dédié avec gestion des plaintes", },
+  { icon: TrendingUp, label: "Scoring IA",            desc: "Évaluation automatique des CV avec score 0-100",  },
 ];
 
 const iaFeatures = [
-  { icon: Sparkles,     title: "Génération IA",   desc: "Descriptions d'offres générées automatiquement via DeepSeek R1", color: "#7c3aed" },
-  { icon: FileSearch,   title: "Scoring ATS",     desc: "Score de compatibilité CV/offre calculé par l'IA (0-100)", color: "#0891b2" },
-  { icon: Bot,          title: "Chatbot RAG",     desc: "Assistant intelligent qui répond avec les vraies offres via ChromaDB", color: "#059669" },
+  { icon: Sparkles,     title: "Génération IA",   desc: "Descriptions d'offres générées automatiquement via DeepSeek R1",   },
+  { icon: FileSearch,   title: "Scoring ATS",     desc: "Score de compatibilité CV/offre calculé par l'IA (0-100)", },
+  { icon: Bot,          title: "Chatbot RAG",     desc: "Assistant intelligent qui répond avec les vraies offres via ChromaDB",},
 ];
 
 export default function Index() {
@@ -31,14 +31,7 @@ export default function Index() {
         
         {/* Left — text */}
         <div>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            background: "#f0fdfa", color: "#0891b2", border: "1px solid #99f6e4",
-            borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 700,
-            marginBottom: 24
-          }}>
-            <BrainCircuit size={14} /> 3 fonctionnalités IA intégrées
-          </div>
+          
 
           <h1 style={{
             fontSize: 52, fontWeight: 900, color: "#0f172a",
@@ -57,13 +50,14 @@ export default function Index() {
 
           <div style={{ display: "flex", gap: 12 }}>
             <Link to="/Landing" style={{ textDecoration: "none" }}>
-              <button style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "14px 28px", borderRadius: 12, border: "none",
-                background: "#0891b2", color: "#fff", fontSize: 15, fontWeight: 700,
-                cursor: "pointer", boxShadow: "0 4px 16px rgba(8,145,178,0.3)",
-                transition: "transform 0.15s"
-              }}
+             <button style={{
+  display: "flex", alignItems: "center", gap: 8,
+  padding: "14px 28px", borderRadius: 12, border: "none",
+  background: "linear-gradient(135deg,#b6d7df,#0e7490)",
+  color: "#fff", fontWeight: 700, fontSize: 14,
+  cursor: "pointer", boxShadow: "0 4px 16px rgba(8,145,178,0.3)",
+  transition: "transform 0.15s"
+}}
                 onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
                 onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
               >
@@ -107,22 +101,8 @@ export default function Index() {
             </div>
           ))}
 
-          {/* Mini stats */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 8 }}>
-            {[
-              { value: "5", label: "Acteurs" },
-              { value: "35", label: "User Stories" },
-              { value: "3", label: "IA Features" },
-            ].map(s => (
-              <div key={s.label} style={{
-                textAlign: "center", padding: "16px 8px", borderRadius: 12,
-                background: "#f0fdfa", border: "1px solid #ccfbf1"
-              }}>
-                <div style={{ fontSize: 24, fontWeight: 800, color: "#0891b2" }}>{s.value}</div>
-                <div style={{ fontSize: 11, color: "#64748b", marginTop: 2, fontWeight: 500 }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
+         
+          
         </div>
       </div>
 
@@ -130,11 +110,7 @@ export default function Index() {
       <div style={{ background: "#f8fafc", padding: "80px 32px", borderTop: "1px solid #e2e8f0" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ marginBottom: 48 }}>
-            <span style={{
-              display: "inline-block", background: "#f0fdfa", color: "#0891b2",
-              borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700,
-              letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12
-            }}>Fonctionnalités</span>
+           
             <h2 style={{ fontSize: 36, fontWeight: 800, color: "#0f172a", margin: "0 0 8px" }}>
               Tout ce dont vous avez besoin
             </h2>
@@ -175,7 +151,8 @@ export default function Index() {
           <button style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "14px 32px", borderRadius: 12, border: "none",
-            background: "#0891b2", color: "#fff", fontSize: 15, fontWeight: 700,
+            background: "linear-gradient(135deg,#b6d7df,#0e7490)",
+             color: "#fff",
             cursor: "pointer", boxShadow: "0 4px 16px rgba(8,145,178,0.3)"
           }}>
             Nous contacter <ArrowRight size={16} />

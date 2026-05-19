@@ -166,7 +166,7 @@ export default function Entreprises() {
             <button onClick={() => { setShowForm(!showForm); setFormError(""); }}
               style={{
                 padding: "11px 22px", borderRadius: 12, border: "none",
-                background: showForm ? "#f1f5f9" : "#0891b2",
+                background: "linear-gradient(135deg,#b6d7df,#0e7490)",
                 color: showForm ? "#475569" : "#fff",
                 fontWeight: 700, fontSize: 14, cursor: "pointer",
                 display: "flex", alignItems: "center", gap: 8,

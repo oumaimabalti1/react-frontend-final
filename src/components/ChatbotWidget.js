@@ -44,7 +44,7 @@ export default function ChatbotWidget() {
       <button onClick={() => setOpen(true)} style={{
         position: "fixed", bottom: 24, right: 24, zIndex: 9999,
         width: 56, height: 56, borderRadius: "50%", border: "none",
-        background: "linear-gradient(135deg, #8b5cf6, #6d28d9)",
+        background: "linear-gradient(135deg, #b6d7df, #6d28d9)",
         color: "#fff", cursor: "pointer",
         boxShadow: "0 4px 20px rgba(109,40,217,0.4)",
         display: "flex", alignItems: "center", justifyContent: "center",
@@ -67,7 +67,7 @@ export default function ChatbotWidget() {
     }}>
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, #8b5cf6, #6d28d9)",
+        background: "linear-gradient(135deg, #b6d7df, #6d28d9)",
         padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

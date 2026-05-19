@@ -140,9 +140,9 @@ export default function Offres() {
                 <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, color: "#0f172a", margin: "0 0 8px" }}>Gestion des Offres</h1>
                 <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>{offres.length} offre{offres.length !== 1 ? "s" : ""}</p>
               </div>
-              <button onClick={openNew} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: "#0891b2", boxShadow: "0 2px 8px rgba(8,145,178,0.3)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
-                <Plus size={15} /> Publier une offre
-              </button>
+             <button onClick={openNew} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#b6d7df,#0e7490)", color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+ Publier une offre
+</button>
             </div>
           </div>
         </div>

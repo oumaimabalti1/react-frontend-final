@@ -119,7 +119,7 @@ export default function Conge() {
               <h1 style={{ fontSize: 32, fontWeight: 800, color: "#0f172a", margin: "0 0 4px" }}>Mes Congés</h1>
               <p style={{ color: "#94a3b8", fontSize: 14, margin: 0 }}>{conges.length} demande{conges.length !== 1 ? "s" : ""} au total</p>
             </div>
-            <button onClick={() => { setShowForm(!showForm); setFormError(""); }} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: showForm ? "#f1f5f9" : "#0891b2", color: showForm ? "#475569" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: showForm ? "none" : "0 2px 8px rgba(8,145,178,0.3)" }}>
+            <button onClick={() => { setShowForm(!showForm); setFormError(""); }} style={{ padding: "11px 22px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#b6d7df,#0e7490)", color: showForm ? "#475569" : "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: showForm ? "none" : "0 2px 8px rgba(8,145,178,0.3)" }}>
               {showForm ? <><X size={15} /> Annuler</> : <><Plus size={15} /> Nouvelle demande</>}
             </button>
           </div>

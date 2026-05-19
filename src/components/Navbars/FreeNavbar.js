@@ -10,7 +10,7 @@ export default function FreeNavbar() {
     <>
       <nav style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
-        background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)",
+        background: "#b6d7df", backdropFilter: "blur(16px)",
         borderBottom: "1px solid #e2e8f0", height: 64,
         display: "flex", alignItems: "center", padding: "0 32px", justifyContent: "space-between"
       }}>
@@ -39,11 +39,11 @@ export default function FreeNavbar() {
             }}>Se connecter</button>
           </Link>
           <Link to="/Landing" style={{ textDecoration: "none" }}>
-            <button style={{
-              padding: "8px 20px", borderRadius: 10, border: "none",
-              background: "#0891b2", color: "#fff", fontSize: 13, fontWeight: 700,
-              cursor: "pointer", boxShadow: "0 2px 8px rgba(8,145,178,0.3)"
-            }}>Commencer</button>
+          <button style={{
+  padding: "8px 20px", borderRadius: 10, border: "none",
+  background: "linear-gradient(135deg,#b6d7df,#0e7490)", color: "#fff", fontSize: 13, fontWeight: 700,
+  cursor: "pointer", boxShadow: "0 2px 8px rgba(8,145,178,0.3)"
+}}>Commencer</button>
           </Link>
           <button onClick={() => setOpen(!open)} style={{
             background: "none", border: "none", cursor: "pointer", color: "#334155", padding: 4,

@@ -299,17 +299,18 @@ export default function Profile() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
-                <button type="submit" disabled={pwLoading} style={{
-                  padding: "11px 28px", borderRadius: 12, border: "none",
-                  background: "#0891b2", color: "#fff", fontWeight: 700, fontSize: 14,
-                  cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
-                  boxShadow: "0 2px 8px rgba(8,145,178,0.3)",
-                }}>
-                  <KeyRound size={15} />
-                  {pwLoading ? "Changement..." : "Changer le mot de passe"}
-                </button>
-              </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
+  <button type="submit" disabled={pwLoading} style={{
+    padding: "11px 28px", borderRadius: 12, border: "none",
+    background: "linear-gradient(135deg,#b6d7df,#0e7490)",
+    color: "#fff", fontWeight: 700, fontSize: 14,
+    cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
+    boxShadow: "0 2px 8px rgba(14,116,144,0.3)",
+  }}>
+    <KeyRound size={15} />
+    {pwLoading ? "Changement..." : "Changer le mot de passe"}
+  </button>
+</div>
             </form>
           </div>
 

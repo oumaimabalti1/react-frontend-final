@@ -43,14 +43,7 @@ export default function ContactUs() {
 
         {/* Hero — left aligned */}
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 32px 0" }}>
-          <span style={{
-            display: "inline-block", background: "#f0fdfa", color: "#0891b2",
-            border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px",
-            fontSize: 12, fontWeight: 700, letterSpacing: "0.08em",
-            textTransform: "uppercase", marginBottom: 16
-          }}>
-            Contact
-          </span>
+          
           <h1 style={{ fontSize: 48, fontWeight: 900, color: "#0f172a", margin: "0 0 16px", lineHeight: 1.1 }}>
             Contactez-<span style={{ color: "#0891b2" }}>nous</span>
           </h1>
@@ -169,18 +162,18 @@ export default function ContactUs() {
 
                     {error && <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 16 }}>{error}</p>}
 
-                    <button type="submit" disabled={loading} style={{
-                      width: "100%", padding: "14px", borderRadius: 12, border: "none",
-                      background: loading ? "#e2e8f0" : "#0891b2",
-                      color: loading ? "#94a3b8" : "#fff", fontWeight: 700, fontSize: 15,
-                      cursor: loading ? "not-allowed" : "pointer",
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                      boxShadow: loading ? "none" : "0 4px 16px rgba(8,145,178,0.3)",
-                      transition: "all 0.2s"
-                    }}>
-                      <Send size={16} />
-                      {loading ? "Envoi en cours..." : "Envoyer le message"}
-                    </button>
+                  <button type="submit" disabled={loading} style={{
+  width: "100%", padding: "14px", borderRadius: 12, border: "none",
+  background: loading ? "#e2e8f0" : "linear-gradient(135deg,#b6d7df,#0e7490)",
+  color: loading ? "#94a3b8" : "#fff", fontWeight: 700, fontSize: 15,
+  cursor: loading ? "not-allowed" : "pointer",
+  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+  boxShadow: loading ? "none" : "0 4px 16px rgba(8,145,178,0.3)",
+  transition: "all 0.2s"
+}}>
+  <Send size={16} />
+  {loading ? "Envoi en cours..." : "Envoyer le message"}
+</button>
                   </form>
                 </>
               )}

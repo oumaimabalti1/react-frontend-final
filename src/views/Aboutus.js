@@ -18,14 +18,7 @@ export default function Aboutus() {
 
         {/* Hero — left aligned */}
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 32px 0" }}>
-          <span style={{
-            display: "inline-block", background: "#f0fdfa", color: "#0891b2",
-            border: "1px solid #99f6e4", borderRadius: 8, padding: "5px 14px",
-            fontSize: 12, fontWeight: 700, letterSpacing: "0.08em",
-            textTransform: "uppercase", marginBottom: 16
-          }}>
-            Notre histoire
-          </span>
+          
           <h1 style={{ fontSize: 48, fontWeight: 900, color: "#0f172a", margin: "0 0 16px", lineHeight: 1.1 }}>
             À Propos de <span style={{ color: "#0891b2" }}>EasyRH</span>
           </h1>
